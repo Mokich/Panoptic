@@ -69,7 +69,7 @@ On a server running Panopticon every tool is gated by permission nodes synced to
 
 17 languages with a uniform key set (~540 keys) in every target: en, ru, uk, be, nl, de, fr, es, es_mx, pt_br, pl, it, tr, ko, ja, zh_cn, zh_tw.
 
-## Support
+## Support 
 
 If this project is useful to you, you can support its development - thank you!
 
