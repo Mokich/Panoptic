@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.mokich.panoptic.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [],
+  "client": [
+    "GuiGraphicsCaptureMixin",
+    "InventoryScreenEntityMixin",
+    "ItemRendererCaptureMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

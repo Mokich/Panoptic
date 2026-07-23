@@ -1,0 +1,52 @@
+def stampMillis = {
+    Calendar cal = Calendar.getInstance()
+    cal.clear()
+    cal.set(1984, Calendar.APRIL, 4, 0, 0, 0)
+    return cal.getTimeInMillis()
+}()
+
+tasks.withType(AbstractArchiveTask).configureEach {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+
+def stampJarDates = tasks.register('stampJarDates') {
+    doLast {
+        File libs = layout.buildDirectory.dir('libs').get().asFile
+        if (!libs.isDirectory()) {
+            return
+        }
+        libs.listFiles().findAll { it.isFile() && it.name.endsWith('.jar') }.each { File jar ->
+            File tmp = new File(jar.parentFile, jar.name + '.stamp')
+            new java.util.zip.ZipFile(jar).withCloseable { zf ->
+                new java.util.zip.ZipOutputStream(new BufferedOutputStream(new FileOutputStream(tmp))).withCloseable { zos ->
+                    Collections.list(zf.entries()).each { e ->
+                        java.util.zip.ZipEntry ne = new java.util.zip.ZipEntry(e.name)
+                        ne.setTime(stampMillis)
+                        ne.setMethod(e.getMethod())
+                        if (e.getMethod() == java.util.zip.ZipEntry.STORED) {
+                            ne.setSize(e.getSize())
+                            ne.setCompressedSize(e.getCompressedSize())
+                            ne.setCrc(e.getCrc())
+                        }
+                        zos.putNextEntry(ne)
+                        if (!e.isDirectory()) {
+                            zf.getInputStream(e).withCloseable { input -> input.transferTo(zos) }
+                        }
+                        zos.closeEntry()
+                    }
+                }
+            }
+            jar.delete()
+            tmp.renameTo(jar)
+        }
+    }
+}
+
+tasks.matching { it.name in ['build', 'assemble'] }.configureEach {
+    finalizedBy stampJarDates
+}
+stampJarDates.configure {
+    mustRunAfter tasks.withType(AbstractArchiveTask)
+    mustRunAfter tasks.matching { it.name in ['reobfJar', 'remapJar'] }
+}

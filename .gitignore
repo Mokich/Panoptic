@@ -1,0 +1,35 @@
+# Build output
+build/
+.gradle/
+out/
+bin/
+
+# Run dirs (Forge/NeoForge/Fabric)
+run/
+run-data/
+runs/
+logs/
+*.log
+
+# Datagen output
+src/generated/
+
+# Local maven publish target
+mcmodsrepo/
+
+# Third-party jars (flatDir)
+libs/
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.settings/
+.classpath
+.project
+
+# OS
+desktop.ini
+.DS_Store
+Thumbs.db

@@ -1,0 +1,5 @@
+rootProject.name = 'Panoptic'
+
+includeBuild '1.20.1-forge'
+includeBuild '1.21.1-forge'
+includeBuild '1.21.1-neoforge'

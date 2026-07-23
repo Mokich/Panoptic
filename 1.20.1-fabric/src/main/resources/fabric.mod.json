@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "panoptic",
+  "version": "${version}",
+  "name": "Panoptic",
+  "authors": ["Mokich"],
+  "license": "LGPL-3.0-only",
+  "icon": "logo.png",
+  "accessWidener": "panoptic.accesswidener",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["net.mokich.panoptic.PanopticClient"]
+  },
+  "mixins": [
+    {
+      "config": "panoptic.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.16",
+    "minecraft": "~1.20.1",
+    "java": ">=17",
+    "fabric-api": "*"
+  }
+}

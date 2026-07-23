@@ -1,0 +1,46 @@
+def fabricBuilds = ['1.21.1-fabric', '1.20.1-fabric']
+def loaderBuilds = ['1.20.1-forge', '1.21.1-forge', '1.21.1-neoforge'] + fabricBuilds
+
+fabricBuilds.each { dir ->
+    def suffix = dir.replace('.', '_').replace('-', '_')
+    tasks.register("build_${suffix}", Exec) {
+        group = 'build'
+        description = "Assembles ${dir} via its own Gradle wrapper"
+        workingDir = file(dir)
+        commandLine 'cmd', '/c', file("${dir}/gradlew.bat").absolutePath, 'build'
+    }
+    tasks.register("clean_${suffix}", Exec) {
+        group = 'build'
+        description = "Cleans ${dir} via its own Gradle wrapper"
+        workingDir = file(dir)
+        commandLine 'cmd', '/c', file("${dir}/gradlew.bat").absolutePath, 'clean'
+    }
+}
+
+tasks.register('collectJars', Copy) {
+    group = 'build'
+    description = 'Copies every built loader jar into the root build/libs folder'
+    dependsOn gradle.includedBuilds.collect { it.task(':build') }
+    dependsOn fabricBuilds.collect { "build_${it.replace('.', '_').replace('-', '_')}" }
+    loaderBuilds.each { from("${it}/build/libs") }
+    include '*-Forge-*.jar', '*-NeoForge-*.jar', '*-Fabric-*.jar'
+    into layout.buildDirectory.dir('libs')
+}
+
+tasks.register('cleanRoot', Delete) {
+    delete layout.buildDirectory
+}
+
+tasks.register('buildAll') {
+    group = 'build'
+    description = 'Assembles every build and collects jars into root build/libs'
+    dependsOn 'collectJars'
+}
+
+tasks.register('cleanAll') {
+    group = 'build'
+    description = 'Cleans every included build, Fabric build and the root build/libs'
+    dependsOn 'cleanRoot'
+    dependsOn gradle.includedBuilds.collect { it.task(':clean') }
+    dependsOn fabricBuilds.collect { "clean_${it.replace('.', '_').replace('-', '_')}" }
+}
