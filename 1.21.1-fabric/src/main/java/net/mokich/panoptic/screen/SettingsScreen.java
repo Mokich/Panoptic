@@ -108,6 +108,7 @@ public class SettingsScreen extends Screen implements TextTyping {
         rows.add(new Opt(ModSettings.MAP_MAX_ZOOM, "panoptic.set.map_max_zoom", Kind.ZOOM, 0, 0, 0));
         rows.add(new Opt(ModSettings.STRUCT_MIN_ZOOM, "panoptic.set.struct_min_zoom", Kind.ZOOM, 0, 0, 0));
         rows.add(new Opt(ModSettings.LOG_MAX_LINES, "panoptic.set.log_max_lines", Kind.TEXT_INT, 0, 999999, 0));
+        rows.add(new Opt(ModSettings.HEIGHT_MAP, "panoptic.set.height_map", Kind.BOOL, 0, 0, 0));
         rows.add("panoptic.set.theme");
         rows.add(new Opt(ModSettings.THEME_R, "panoptic.set.theme_r", Kind.SLIDER, 0, 255, 0));
         rows.add(new Opt(ModSettings.THEME_G, "panoptic.set.theme_g", Kind.SLIDER, 0, 255, 0));
@@ -260,6 +261,9 @@ public class SettingsScreen extends Screen implements TextTyping {
             boolean on = ModSettings.getBool(opt.key());
             boolean hov = mouseX >= cx1 && mouseX < cx2 && mouseY >= y + 2 && mouseY < y + ROW_H - 2;
             GuiStyle.button(g, this.font, cx1, y + 2, cx2, y + ROW_H - 2, optValue(opt), hov, true, on);
+            if (rowHov && opt.key().equals(ModSettings.HEIGHT_MAP)) {
+                hoverTip = I18n.get("panoptic.set.height_map_note");
+            }
             return;
         }
         if (opt.kind() == Kind.TEXT_INT) {

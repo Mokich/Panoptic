@@ -71,6 +71,10 @@
   "panoptic.seed.scale.many": "%s blokken",
   "panoptic.seed.scale.thousand": "%sk blokken",
   "panoptic.seed.filter_n": "Filter:",
+  "panoptic.seed.height_surface": "Oppervlak",
+  "panoptic.seed.height_y": "Y",
+  "panoptic.seed.mode_biome": "Biomen",
+  "panoptic.seed.mode_height": "Hoogte",
 
   "panoptic.struct.minecraft.ancient_city": "Oude stad",
   "panoptic.struct.minecraft.bastion_remnant": "Bastionrestant",
@@ -494,6 +498,7 @@
   "panoptic.adm.node.inspector": "Inspecteur",
   "panoptic.adm.node.seed.view": "Wereldseed",
   "panoptic.adm.node.seed.structures": "Structuren op kaart",
+  "panoptic.adm.node.seed.teleport": "Teleporteren",
   "panoptic.adm.node.trade": "Handelsinspecteur",
   "panoptic.adm.node.trade.spawn": "Dorpeling spawnen",
   "panoptic.adm.node.screens": "Scherminspecteur",

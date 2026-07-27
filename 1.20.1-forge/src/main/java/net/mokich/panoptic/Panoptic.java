@@ -4,6 +4,7 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.mokich.panoptic.config.LogFeed;
+import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -29,7 +30,9 @@ public class Panoptic {
       ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON,
             PanopticConfig.SPEC);
       if (FMLEnvironment.dist.isClient()) {
-         System.setProperty("java.awt.headless", "false");
+         if (Util.getPlatform() != Util.OS.OSX) {
+            System.setProperty("java.awt.headless", "false");
+         }
          LogFeed.attach();
       }
    }
@@ -50,5 +53,6 @@ public class Panoptic {
       PERMS_CHANNEL.registerMessage(10, StructRegionPackets.Result.class, StructRegionPackets.Result::encode, StructRegionPackets.Result::decode, StructRegionPackets.Result::handle);
       PERMS_CHANNEL.registerMessage(11, BiomeTilePackets.Request.class, BiomeTilePackets.Request::encode, BiomeTilePackets.Request::decode, BiomeTilePackets.Request::handle);
       PERMS_CHANNEL.registerMessage(12, BiomeTilePackets.Result.class, BiomeTilePackets.Result::encode, BiomeTilePackets.Result::decode, BiomeTilePackets.Result::handle);
+      PERMS_CHANNEL.registerMessage(13, TeleportSurfacePacket.class, TeleportSurfacePacket::encode, TeleportSurfacePacket::decode, TeleportSurfacePacket::handle);
    }
 }

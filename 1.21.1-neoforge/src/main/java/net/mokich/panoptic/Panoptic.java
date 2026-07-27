@@ -7,6 +7,7 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+import net.minecraft.Util;
 import net.mokich.panoptic.config.LogFeed;
 import net.mokich.panoptic.config.PanopticConfig;
 import net.mokich.panoptic.network.*;
@@ -19,7 +20,9 @@ public class Panoptic {
         modEventBus.addListener(this::registerPayloads);
         modContainer.registerConfig(ModConfig.Type.COMMON, PanopticConfig.SPEC);
         if (FMLEnvironment.dist.isClient()) {
-            System.setProperty("java.awt.headless", "false");
+            if (Util.getPlatform() != Util.OS.OSX) {
+                System.setProperty("java.awt.headless", "false");
+            }
             LogFeed.attach();
         }
     }
@@ -45,5 +48,6 @@ public class Panoptic {
         r.playToClient(StructRegionPackets.Result.TYPE, StructRegionPackets.Result.STREAM_CODEC, StructRegionPackets.Result::handle);
         r.playToServer(BiomeTilePackets.Request.TYPE, BiomeTilePackets.Request.STREAM_CODEC, BiomeTilePackets.Request::handle);
         r.playToClient(BiomeTilePackets.Result.TYPE, BiomeTilePackets.Result.STREAM_CODEC, BiomeTilePackets.Result::handle);
+        r.playToServer(TeleportSurfacePacket.TYPE, TeleportSurfacePacket.STREAM_CODEC, TeleportSurfacePacket::handle);
     }
 }

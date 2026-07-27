@@ -1,6 +1,7 @@
 package net.mokich.panoptic.data.seed;
 
 import com.mojang.datafixers.util.Pair;
+import net.mokich.panoptic.Guard;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.core.BlockPos;
@@ -8,6 +9,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.QuartPos;
+import net.minecraft.util.Mth;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
@@ -42,6 +44,16 @@ import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStruct
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ProtoChunk;
+import net.minecraft.world.level.chunk.UpgradeData;
+import net.minecraft.world.level.levelgen.Aquifer;
+import net.minecraft.world.level.levelgen.DensityFunction;
+import net.minecraft.world.level.levelgen.DensityFunctions;
+import net.minecraft.world.level.levelgen.NoiseChunk;
+import net.minecraft.world.level.levelgen.NoiseSettings;
+import net.minecraft.world.level.levelgen.blending.Blender;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -49,10 +61,12 @@ import java.io.DataInputStream;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -83,13 +97,18 @@ public final class SeedMap {
     private final Path regionDir;
     private final ServerLevel serverLevel;
     private final int seaY;
+    public final int seaLevelY;
+    private volatile NoiseGeneratorSettings liteSettings;
     private final ThreadLocal<RandomState> tlRandom = ThreadLocal.withInitial(this::newRandom);
     private final Map<Holder<Biome>, Integer> colorCache = new ConcurrentHashMap<>();
+    private final Map<Long, Integer> heightCache = new ConcurrentHashMap<>();
     private volatile ChunkGeneratorStructureState structState;
     private volatile boolean stateTried;
     private final Object stateLock = new Object();
     private volatile List<Placed> strongholdCache;
     public volatile boolean closed;
+    public volatile int sampleY = Integer.MIN_VALUE;
+    public volatile boolean heightMap;
     public Predicate<ResourceLocation> hiddenFilter = id -> false;
     private final AtomicInteger serverBusy = new AtomicInteger();
 
@@ -114,6 +133,18 @@ public final class SeedMap {
         this.regionDir = regionDir;
         this.serverLevel = serverLevel;
         this.seaY = QuartPos.fromBlock(63);
+        this.seaLevelY = settings != null ? settings.seaLevel() : 63;
+    }
+
+    private NoiseGeneratorSettings liteSettings() {
+        NoiseGeneratorSettings s = liteSettings;
+        if (s == null) {
+            s = new NoiseGeneratorSettings(settings.noiseSettings(), settings.defaultBlock(), settings.defaultFluid(),
+                    settings.noiseRouter(), settings.surfaceRule(), settings.spawnTarget(), settings.seaLevel(),
+                    settings.disableMobGeneration(), false, false, settings.useLegacyRandomSource());
+            liteSettings = s;
+        }
+        return s;
     }
 
     private RandomState newRandom() {
@@ -301,11 +332,243 @@ public final class SeedMap {
         return gen == null && currentWorld;
     }
 
+    private static final int[] CLIMB = {90, 120, 160, 210, 280};
+
     public Holder<Biome> biome(int blockX, int blockZ) {
         if (serverBiomes()) {
             return RemoteBiomes.biomeAt(dim.location(), blockX, blockZ);
         }
-        return biomeSource.getNoiseBiome(QuartPos.fromBlock(blockX), seaY, QuartPos.fromBlock(blockZ), tlRandom.get().sampler());
+        if (sampleY != Integer.MIN_VALUE) {
+            return biomeAtY(blockX, sampleY, blockZ);
+        }
+        Holder<Biome> b = biomeAtY(blockX, 63, blockZ);
+        if (!isCave(b)) {
+            return b;
+        }
+        for (int y : CLIMB) {
+            b = biomeAtY(blockX, y, blockZ);
+            if (!isCave(b)) {
+                return b;
+            }
+        }
+        return b;
+    }
+
+    public Holder<Biome> biomeAtY(int blockX, int blockY, int blockZ) {
+        return biomeSource.getNoiseBiome(QuartPos.fromBlock(blockX), QuartPos.fromBlock(blockY), QuartPos.fromBlock(blockZ), tlRandom.get().sampler());
+    }
+
+    private static boolean isCave(Holder<Biome> b) {
+        ResourceLocation id = b == null ? null : b.unwrapKey().map(ResourceKey::location).orElse(null);
+        if (id == null || !id.getNamespace().equals("minecraft")) {
+            return false;
+        }
+        String p = id.getPath();
+        return p.equals("dripstone_caves") || p.equals("lush_caves") || p.equals("deep_dark");
+    }
+
+    public boolean canHeightMap() {
+        return gen != null && levelHeight != null && !serverBiomes();
+    }
+
+    public int surfaceHeight(int wx, int wz) {
+        long key = ((long) wx << 32) | (wz & 0xFFFFFFFFL);
+        Integer c = heightCache.get(key);
+        if (c != null) {
+            return c;
+        }
+        int h;
+        try {
+            h = gen.getBaseHeight(wx, wz, Heightmap.Types.WORLD_SURFACE_WG, levelHeight, tlRandom.get());
+        } catch (Throwable t) {
+            h = QuartPos.toBlock(seaY);
+        }
+        if (heightCache.size() < 1500000) {
+            heightCache.put(key, h);
+        }
+        return h;
+    }
+
+    private static final Method M_GET_STATE;
+    private static final DensityFunctions.BeardifierOrMarker NO_BEARD = new DensityFunctions.BeardifierOrMarker() {
+        @Override
+        public double compute(DensityFunction.FunctionContext ctx) {
+            return 0.0;
+        }
+
+        @Override
+        public double minValue() {
+            return 0.0;
+        }
+
+        @Override
+        public double maxValue() {
+            return 0.0;
+        }
+    };
+
+    static {
+        Method found = null;
+        try {
+            for (Method mm : NoiseChunk.class.getDeclaredMethods()) {
+                if (mm.getParameterCount() == 0 && mm.getReturnType() == BlockState.class) {
+                    mm.setAccessible(true);
+                    found = mm;
+                    break;
+                }
+            }
+        } catch (Throwable ignored) {
+        }
+        M_GET_STATE = found;
+    }
+
+    public boolean canBatchHeight() {
+        return gen instanceof NoiseBasedChunkGenerator && levelHeight != null && M_GET_STATE != null;
+    }
+
+    public int[] chunkSurface(int cx, int cz, int stride) {
+        if (!canBatchHeight()) {
+            return null;
+        }
+        try {
+            NoiseSettings ns = settings.noiseSettings().clampToHeightAccessor(levelHeight);
+            int cellW = ns.getCellWidth();
+            int cellH = ns.getCellHeight();
+            int cellCountY = Mth.floorDiv(ns.height(), cellH);
+            if (cellCountY <= 0 || cellW <= 0 || 16 % cellW != 0) {
+                return null;
+            }
+            int cellMinY = Mth.floorDiv(ns.minY(), cellH);
+            int cellCountXZ = 16 / cellW;
+            int st = Mth.clamp(stride, 1, 16);
+            RandomState rs = tlRandom.get();
+            ChunkPos cp = new ChunkPos(cx, cz);
+            Registry<Biome> biomeReg = access.registryOrThrow(Registries.BIOME);
+            ProtoChunk pc = new ProtoChunk(cp, UpgradeData.EMPTY, levelHeight, biomeReg, null);
+            int sea = settings.seaLevel();
+            Aquifer.FluidStatus water = new Aquifer.FluidStatus(sea, settings.defaultFluid());
+            Aquifer.FluidStatus lava = new Aquifer.FluidStatus(-54, Blocks.LAVA.defaultBlockState());
+            int lavaTop = Math.min(-54, sea);
+            Aquifer.FluidPicker fp = (fx, fy, fz) -> fy < lavaTop ? lava : water;
+            NoiseChunk nc = NoiseChunk.forChunk(pc, rs, NO_BEARD, liteSettings(), fp, Blender.empty());
+            Predicate<BlockState> solid = Heightmap.Types.OCEAN_FLOOR_WG.isOpaque();
+            BlockState defBlock = settings.defaultBlock();
+            int minBX = cp.getMinBlockX();
+            int minBZ = cp.getMinBlockZ();
+            int[] out = new int[256];
+            Arrays.fill(out, worldMinY());
+            nc.initializeForFirstCellX();
+            for (int cellX = 0; cellX < cellCountXZ; cellX++) {
+                nc.advanceCellX(cellX);
+                for (int cellZ = 0; cellZ < cellCountXZ; cellZ++) {
+                    List<int[]> cols = new ArrayList<>();
+                    for (int lx = cellX * cellW; lx < cellX * cellW + cellW; lx++) {
+                        if ((lx & (st - 1)) != 0) {
+                            continue;
+                        }
+                        for (int lz = cellZ * cellW; lz < cellZ * cellW + cellW; lz++) {
+                            if ((lz & (st - 1)) != 0) {
+                                continue;
+                            }
+                            cols.add(new int[]{lz * 16 + lx, minBX + lx, minBZ + lz, lx - cellX * cellW, lz - cellZ * cellW, 0});
+                        }
+                    }
+                    if (cols.isEmpty()) {
+                        continue;
+                    }
+                    int remaining = cols.size();
+                    int startCellY = 0;
+                    for (int[] col : cols) {
+                        int cy = Mth.floorDiv(nc.preliminarySurfaceLevel(col[1], col[2]) + 48, cellH) - cellMinY;
+                        if (cy > startCellY) {
+                            startCellY = cy;
+                        }
+                    }
+                    startCellY = Mth.clamp(startCellY, 0, cellCountY - 1);
+                    for (int cellY = startCellY; cellY >= 0 && remaining > 0; cellY--) {
+                        nc.selectCellYZ(cellY, cellZ);
+                        for (int yin = cellH - 1; yin >= 0 && remaining > 0; yin--) {
+                            int y = (cellMinY + cellY) * cellH + yin;
+                            nc.updateForY(y, (double) yin / (double) cellH);
+                            for (int[] col : cols) {
+                                if (col[5] != 0) {
+                                    continue;
+                                }
+                                nc.updateForX(col[1], (double) col[3] / (double) cellW);
+                                nc.updateForZ(col[2], (double) col[4] / (double) cellW);
+                                BlockState bs;
+                                try {
+                                    bs = (BlockState) M_GET_STATE.invoke(nc);
+                                } catch (Throwable t) {
+                                    bs = null;
+                                }
+                                if (bs == null) {
+                                    bs = defBlock;
+                                }
+                                if (solid.test(bs)) {
+                                    out[col[0]] = y + 1;
+                                    col[5] = 1;
+                                    remaining--;
+                                }
+                            }
+                        }
+                    }
+                }
+                nc.swapSlices();
+            }
+            nc.stopInterpolation();
+            return out;
+        } catch (Throwable t) {
+            Guard.report(t);
+            return null;
+        }
+    }
+
+    public int worldMinY() {
+        if (levelHeight != null) {
+            return levelHeight.getMinBuildHeight();
+        }
+        return dim == Level.NETHER || dim == Level.END ? 0 : -64;
+    }
+
+    public int worldMaxY() {
+        if (levelHeight != null) {
+            return levelHeight.getMaxBuildHeight() - 1;
+        }
+        return dim == Level.NETHER ? 127 : dim == Level.END ? 255 : 319;
+    }
+
+    public int elevationColor(int h) {
+        int sea = seaLevelY;
+        float t;
+        if (h <= sea) {
+            t = 0.30F * Mth.clamp((h - (sea - 56)) / 56F, 0F, 1F);
+        } else {
+            t = 0.30F + 0.70F * Mth.clamp((h - sea) / 150F, 0F, 1F);
+        }
+        if (t < 0.16F) {
+            return lerpC(0x000004, 0x270B52, t / 0.16F);
+        }
+        if (t < 0.33F) {
+            return lerpC(0x270B52, 0x65156E, (t - 0.16F) / 0.17F);
+        }
+        if (t < 0.50F) {
+            return lerpC(0x65156E, 0x9F2A63, (t - 0.33F) / 0.17F);
+        }
+        if (t < 0.67F) {
+            return lerpC(0x9F2A63, 0xD44842, (t - 0.50F) / 0.17F);
+        }
+        if (t < 0.84F) {
+            return lerpC(0xD44842, 0xF57D15, (t - 0.67F) / 0.17F);
+        }
+        return lerpC(0xF57D15, 0xFCFFA4, (t - 0.84F) / 0.16F);
+    }
+
+    private static int lerpC(int c0, int c1, float f) {
+        int r = (int) (((c0 >> 16) & 255) + (((c1 >> 16) & 255) - ((c0 >> 16) & 255)) * f);
+        int g = (int) (((c0 >> 8) & 255) + (((c1 >> 8) & 255) - ((c0 >> 8) & 255)) * f);
+        int b = (int) ((c0 & 255) + ((c1 & 255) - (c0 & 255)) * f);
+        return 0xFF000000 | (r << 16) | (g << 8) | b;
     }
 
     public int colorAt(int blockX, int blockZ) {
@@ -1312,5 +1575,8 @@ public final class SeedMap {
         CURATED.put("minecraft:end_midlands", 0xC8C890);
         CURATED.put("minecraft:end_barrens", 0xB8B880);
         CURATED.put("minecraft:small_end_islands", 0x9090C0);
+        CURATED.put("minecraft:dripstone_caves", 0x6E5A48);
+        CURATED.put("minecraft:lush_caves", 0x50A040);
+        CURATED.put("minecraft:deep_dark", 0x0E1A20);
     }
 }

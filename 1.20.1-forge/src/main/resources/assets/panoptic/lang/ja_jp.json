@@ -71,6 +71,10 @@
   "panoptic.seed.scale.many": "%sブロック",
   "panoptic.seed.scale.thousand": "%s千ブロック",
   "panoptic.seed.filter_n": "フィルター:",
+  "panoptic.seed.height_surface": "地表",
+  "panoptic.seed.height_y": "Y",
+  "panoptic.seed.mode_biome": "バイオーム",
+  "panoptic.seed.mode_height": "高さ",
 
   "panoptic.struct.minecraft.ancient_city": "古代都市",
   "panoptic.struct.minecraft.bastion_remnant": "砦の遺跡",
@@ -494,6 +498,7 @@
   "panoptic.adm.node.inspector": "インスペクター",
   "panoptic.adm.node.seed.view": "ワールドシード",
   "panoptic.adm.node.seed.structures": "マップ上の構造物",
+  "panoptic.adm.node.seed.teleport": "テレポート",
   "panoptic.adm.node.trade": "取引インスペクター",
   "panoptic.adm.node.trade.spawn": "村人スポーン",
   "panoptic.adm.node.screens": "画面インスペクター",

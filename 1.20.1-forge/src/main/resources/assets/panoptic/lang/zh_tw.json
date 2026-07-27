@@ -71,6 +71,10 @@
   "panoptic.seed.scale.many": "%s格",
   "panoptic.seed.scale.thousand": "%s千格",
   "panoptic.seed.filter_n": "篩選器:",
+  "panoptic.seed.height_surface": "地表",
+  "panoptic.seed.height_y": "Y",
+  "panoptic.seed.mode_biome": "生物群系",
+  "panoptic.seed.mode_height": "高度",
 
   "panoptic.struct.minecraft.ancient_city": "遠古城市",
   "panoptic.struct.minecraft.bastion_remnant": "堡壘遺跡",
@@ -494,6 +498,7 @@
   "panoptic.adm.node.inspector": "檢視器",
   "panoptic.adm.node.seed.view": "世界種子",
   "panoptic.adm.node.seed.structures": "地圖上的結構",
+  "panoptic.adm.node.seed.teleport": "傳送",
   "panoptic.adm.node.trade": "交易檢視器",
   "panoptic.adm.node.trade.spawn": "生成村民",
   "panoptic.adm.node.screens": "介面檢視器",

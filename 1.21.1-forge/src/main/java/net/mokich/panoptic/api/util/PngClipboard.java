@@ -1,6 +1,7 @@
 package net.mokich.panoptic.api.util;
 
 import com.mojang.blaze3d.platform.NativeImage;
+import net.minecraft.client.Minecraft;
 
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -10,11 +11,47 @@ import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.TimeUnit;
 
 public final class PngClipboard {
     private PngClipboard() {}
 
     public static boolean copy(Path file) {
+        if (Minecraft.ON_OSX) {
+            return copyMac(file);
+        }
+        return copyAwt(file);
+    }
+
+    private static boolean copyMac(Path file) {
+        Path tmp = null;
+        try {
+            tmp = Files.createTempFile("panoptic-clip", ".png");
+            Files.write(tmp, Files.readAllBytes(file));
+            String script = "set the clipboard to (read (POSIX file \""
+                    + tmp.toAbsolutePath() + "\") as " + (char) 0x00AB + "class PNGf" + (char) 0x00BB + ")";
+            Process p = new ProcessBuilder("osascript", "-e", script)
+                    .redirectOutput(ProcessBuilder.Redirect.DISCARD)
+                    .redirectError(ProcessBuilder.Redirect.DISCARD)
+                    .start();
+            if (!p.waitFor(5, TimeUnit.SECONDS)) {
+                p.destroyForcibly();
+                return false;
+            }
+            return p.exitValue() == 0;
+        } catch (Throwable t) {
+            return false;
+        } finally {
+            if (tmp != null) {
+                try {
+                    Files.deleteIfExists(tmp);
+                } catch (Throwable ignored) {
+                }
+            }
+        }
+    }
+
+    private static boolean copyAwt(Path file) {
         try (InputStream in = Files.newInputStream(file)) {
             NativeImage img = NativeImage.read(in);
             int w = img.getWidth();

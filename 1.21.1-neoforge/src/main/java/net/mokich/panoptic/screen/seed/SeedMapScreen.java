@@ -5,12 +5,15 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
+import net.mokich.panoptic.Panoptic;
+import net.mokich.panoptic.network.TeleportSurfacePacket;
 import net.mokich.panoptic.api.ui.GuiStyle;
 import net.mokich.panoptic.api.ui.HelpCard;
 import net.mokich.panoptic.api.ui.Icons;
 import net.mokich.panoptic.api.ui.TextOps;
 import net.mokich.panoptic.api.ui.TextTyping;
 import net.mokich.panoptic.config.ModBinds;
+import net.mokich.panoptic.config.Perms;
 import net.mokich.panoptic.config.ModSettings;
 import net.mokich.panoptic.data.seed.ClientWorldgen;
 import net.mokich.panoptic.data.seed.SeedMap;
@@ -32,6 +35,9 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 
 import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -40,7 +46,7 @@ import java.util.concurrent.Executors;
 public class SeedMapScreen extends Screen implements TextTyping {
     @Override
     public boolean gmtTyping() {
-        return seedFocused;
+        return seedFocused || searchOpen;
     }
     private static final int MARGIN = 14;
     private static final int TOP_H = 40;
@@ -65,12 +71,19 @@ public class SeedMapScreen extends Screen implements TextTyping {
 
     private int mLeft, mTop, mRight, mBottom;
     private boolean dragging;
+    private boolean heightSurface = SeedPrefs.HEIGHT_SURFACE;
+    private int heightY = SeedPrefs.HEIGHT_Y;
+    private boolean heightDragging;
+    private boolean heightMap;
+    private int hsX1, hsY1, hsX2, hsY2;
+    private int mtX1, mtY1, mtX2, mtY2;
     private boolean moved;
     private double pressX, pressY;
     private double lastDragX, lastDragY;
     private long copiedUntil;
     private String notice;
     private volatile Holder<Biome> hoverBiome;
+    private volatile int hoverHeight = Integer.MIN_VALUE;
     private long hoverReqKey = Long.MIN_VALUE;
 
     private final StructWorker structs = new StructWorker(() -> generation);
@@ -164,10 +177,11 @@ public class SeedMapScreen extends Screen implements TextTyping {
     @Override
     protected void init() {
         if (pool == null) {
-            int n = Mth.clamp(Runtime.getRuntime().availableProcessors() - 1, 2, 5);
+            int n = Mth.clamp(Runtime.getRuntime().availableProcessors() - 2, 3, 16);
             pool = Executors.newFixedThreadPool(n, r -> {
                 Thread t = new Thread(r, "gmt-seedmap");
                 t.setDaemon(true);
+                t.setPriority(Thread.MIN_PRIORITY);
                 return t;
             });
         }
@@ -175,6 +189,7 @@ public class SeedMapScreen extends Screen implements TextTyping {
             structPool = Executors.newFixedThreadPool(2, r -> {
                 Thread t = new Thread(r, "gmt-seedmap-struct");
                 t.setDaemon(true);
+                t.setPriority(Thread.MIN_PRIORITY);
                 return t;
             });
         }
@@ -255,16 +270,16 @@ public class SeedMapScreen extends Screen implements TextTyping {
     }
 
     @Override
+    public boolean isPauseScreen() {
+        return false;
+    }
+
+    @Override
     protected void renderBlurredBackground(float partialTick) {
     }
 
     @Override
     protected void renderMenuBackground(GuiGraphics guiGraphics) {
-    }
-
-    @Override
-    public boolean isPauseScreen() {
-        return false;
     }
 
     @Override
@@ -309,12 +324,15 @@ public class SeedMapScreen extends Screen implements TextTyping {
         scis(g, mLeft, mTop, mRight, mBottom);
         g.fill(mLeft, mTop, mRight, mBottom, MAP_BG);
         if (map != null) {
+            map.sampleY = heightSurface ? Integer.MIN_VALUE : heightY;
+            map.heightMap = heightMap;
             tileLayer.draw(g, map, pool, camX, camZ, zoom, mLeft, mTop, mRight, mBottom);
             drawSlimeChunks(g);
             drawGrid(g);
             drawStructures(g, mouseX, mouseY);
             drawMarkers(g);
             drawFoundPulse(g);
+            drawHeightSlider(g, mouseX, mouseY);
             drawDimSelector(g, mouseX, mouseY);
             drawSearch(g, mouseX, mouseY);
         } else {
@@ -335,6 +353,7 @@ public class SeedMapScreen extends Screen implements TextTyping {
             drawDimSelector(g, mouseX, mouseY);
         }
         drawCrosshair(g, mouseX, mouseY);
+        drawProgress(g);
         g.disableScissor();
 
         renderTopBar(g, left, top, right, mouseX, mouseY);
@@ -678,19 +697,26 @@ public class SeedMapScreen extends Screen implements TextTyping {
     }
 
     private void drawSearch(GuiGraphics g, int mouseX, int mouseY) {
-        String lbl = I18nGet("panoptic.seed.search");
-        int w = this.font.width(lbl) + 22;
         schX1 = dimChipX2 + 4;
         schY1 = dimChipY1;
-        schX2 = schX1 + w;
+        int schW = Math.min(200, mRight - schX1 - 8);
+        schX2 = schX1 + schW;
         schY2 = schY1 + 13;
         g.pose().pushPose();
         g.pose().translate(0.0F, 0.0F, 400.0F);
         boolean hov = mouseX >= schX1 && mouseX <= schX2 && mouseY >= schY1 && mouseY <= schY2;
-        g.fill(schX1, schY1, schX2, schY2, hov || searchOpen ? GuiStyle.T(0xE0241E12) : GuiStyle.T(0xD01A150D));
+        g.fill(schX1, schY1, schX2, schY2, searchOpen ? GuiStyle.SEARCH_BG : hov ? GuiStyle.T(0xE0241E12) : GuiStyle.T(0xD01A150D));
         GuiStyle.rect(g, schX1, schY1, schX2, schY2, hov || searchOpen ? GuiStyle.ACCENT : GuiStyle.T(0xFF6A5630));
-        Icons.searchIcon(g, schX1 + 4, schY1 + 3, GuiStyle.ACCENT);
-        g.drawString(this.font, lbl, schX1 + 14, schY1 + 3, hov || searchOpen ? GuiStyle.TEXT : GuiStyle.MUTED, false);
+        Icons.searchIcon(g, schX1 + 4, schY1 + 3, hov || searchOpen ? GuiStyle.ACCENT : GuiStyle.MUTED);
+        if (searchText.isEmpty() && !searchOpen) {
+            g.drawString(this.font, I18nGet("panoptic.seed.search"), schX1 + 14, schY1 + 3, GuiStyle.DIM, false);
+        } else {
+            g.drawString(this.font, this.font.plainSubstrByWidth(searchText, schW - 18), schX1 + 14, schY1 + 3, GuiStyle.TEXT, false);
+            if (searchOpen && (System.currentTimeMillis() / 500) % 2 == 0) {
+                int cw = this.font.width(searchText.substring(0, Mth.clamp(searchCaret, 0, searchText.length())));
+                g.fill(schX1 + 14 + cw, schY1 + 3, schX1 + 15 + cw, schY1 + 12, GuiStyle.ACCENT);
+            }
+        }
         if (!searchOpen) {
             tip(schX1, schY1, schX2, schY2, mouseX, mouseY, "panoptic.seed.tip.search");
         }
@@ -713,12 +739,11 @@ public class SeedMapScreen extends Screen implements TextTyping {
         if (searchOpen && detailItem != null) {
             drawDetailCard(g, mouseX, mouseY);
         } else if (searchOpen) {
-            g.fill(mLeft, mTop, mRight, mBottom, 0x90000000);
-            int pw = Math.min(460, mRight - mLeft - 24);
-            panX1 = (mLeft + mRight - pw) / 2;
+            int pw = Math.min(360, mRight - schX1 - 8);
+            panX1 = schX1;
             panX2 = panX1 + pw;
-            panY1 = mTop + 22;
-            int maxRows = Math.max(3, (mBottom - panY1 - 77) / 19);
+            panY1 = schY2 + 2;
+            int maxRows = Math.max(3, (mBottom - panY1 - 39) / 19);
             int rows = Math.min(maxRows, sugg.size());
             searchScroll = Mth.clamp(searchScroll, 0, Math.max(0, sugg.size() - maxRows));
             double sk = animDt <= 0 ? 1.0 : 1.0 - Math.exp(-animDt * 16.0);
@@ -726,22 +751,12 @@ public class SeedMapScreen extends Screen implements TextTyping {
             if (Math.abs(searchScroll - searchScrollF) < 0.01) {
                 searchScrollF = searchScroll;
             }
-            panY2 = panY1 + 43 + Math.max(rows, 0) * 19 + 15;
+            panY2 = panY1 + 23 + Math.max(rows, 0) * 19 + 15;
             g.fill(panX1 + 3, panY1 + 4, panX2 + 3, panY2 + 4, 0x66000000);
             GuiStyle.panel(g, panX1, panY1, panX2, panY2);
             int fx1 = panX1 + 6;
-            int fy1 = panY1 + 5;
+            int fy1 = panY1 - 14;
             int fx2 = panX2 - 6;
-            g.fill(fx1, fy1, fx2, fy1 + 16, GuiStyle.SEARCH_BG);
-            GuiStyle.rect(g, fx1, fy1, fx2, fy1 + 16, GuiStyle.ACCENT);
-            Icons.searchIcon(g, fx1 + 5, fy1 + 4, GuiStyle.ACCENT);
-            if (!searchText.isEmpty()) {
-                g.drawString(this.font, searchText, fx1 + 16, fy1 + 4, GuiStyle.TEXT, false);
-            }
-            if ((System.currentTimeMillis() / 500) % 2 == 0) {
-                int cw = this.font.width(searchText.substring(0, Mth.clamp(searchCaret, 0, searchText.length())));
-                g.fill(fx1 + 16 + cw, fy1 + 3, fx1 + 17 + cw, fy1 + 13, GuiStyle.ACCENT);
-            }
             int chipY = fy1 + 20;
             int chipX = fx1;
             for (int ci = 0; ci < 4; ci++) {
@@ -1012,12 +1027,13 @@ public class SeedMapScreen extends Screen implements TextTyping {
 
     private boolean clickSearch(double mouseX, double mouseY) {
         if (mouseX >= schX1 && mouseX <= schX2 && mouseY >= schY1 && mouseY <= schY2) {
-            searchOpen = !searchOpen;
-            if (searchOpen) {
+            if (!searchOpen) {
+                searchOpen = true;
                 buildSearchItems();
                 computeSearchSuggestions();
                 dimListOpen = false;
             }
+            searchCaret = searchText.length();
             sound(1.0F);
             return true;
         }
@@ -1035,7 +1051,7 @@ public class SeedMapScreen extends Screen implements TextTyping {
         }
         if (searchOpen) {
             if (mouseX >= panX1 && mouseX <= panX2 && mouseY >= panY1 && mouseY <= panY2) {
-                int chipY = panY1 + 25;
+                int chipY = panY1 + 6;
                 if (mouseY >= chipY && mouseY <= chipY + 13) {
                     String rl = I18nGet("panoptic.seed.reset");
                     int rw = this.font.width(rl) + 12;
@@ -1068,9 +1084,9 @@ public class SeedMapScreen extends Screen implements TextTyping {
                     }
                     return true;
                 }
-                int maxRows = Math.max(3, (mBottom - panY1 - 77) / 19);
+                int maxRows = Math.max(3, (mBottom - panY1 - 39) / 19);
                 int vrows = Math.min(maxRows, sugg.size());
-                int listTop = panY1 + 42;
+                int listTop = panY1 + 23;
                 if (mouseY >= listTop + vrows * 19) {
                     return true;
                 }
@@ -1128,7 +1144,7 @@ public class SeedMapScreen extends Screen implements TextTyping {
     }
 
     private void ensureSearchSelVisible() {
-        int maxRows = Math.max(3, (mBottom - (mTop + 22) - 77) / 19);
+        int maxRows = Math.max(3, (mBottom - (schY2 + 2) - 39) / 19);
         if (searchSel < searchScroll) {
             searchScroll = searchSel;
         } else if (searchSel >= searchScroll + maxRows) {
@@ -1457,6 +1473,135 @@ public class SeedMapScreen extends Screen implements TextTyping {
         g.fill(mLeft, mouseY, mRight, mouseY + 1, 0x18FFFFFF);
     }
 
+    private int hMinY() {
+        return map != null ? map.worldMinY() : (mapDim == Level.NETHER || mapDim == Level.END ? 0 : -64);
+    }
+
+    private int hMaxY() {
+        return map != null ? map.worldMaxY() : (mapDim == Level.NETHER ? 127 : 319);
+    }
+
+    private void drawProgress(GuiGraphics g) {
+        if (map == null || !tileLayer.loading()) {
+            return;
+        }
+        float p = tileLayer.progress();
+        int bw = Math.min(150, mRight - mLeft - 16);
+        if (bw < 50) {
+            return;
+        }
+        int bx = mLeft + 8;
+        int bh = 6;
+        int by = mBottom - 14;
+        g.pose().pushPose();
+        g.pose().translate(0.0F, 0.0F, 400.0F);
+        g.drawString(this.font, I18nGet("panoptic.seed.loading") + "  " + Math.round(p * 100) + "%",
+                bx, by - 11, GuiStyle.TEXT, true);
+        g.fill(bx - 1, by - 1, bx + bw + 1, by + bh + 1, GuiStyle.T(0xC0000000));
+        g.fill(bx, by, bx + bw, by + bh, GuiStyle.T(0xFF2A2214));
+        int fw = Math.round(bw * p);
+        if (fw > 0) {
+            g.fill(bx, by, bx + fw, by + bh, GuiStyle.ACCENT);
+        }
+        GuiStyle.rect(g, bx - 1, by - 1, bx + bw + 1, by + bh + 1, GuiStyle.T(0xFF6A5630));
+        g.pose().popPose();
+    }
+
+    private void drawHeightSlider(GuiGraphics g, int mouseX, int mouseY) {
+        if (map == null || !map.canHeightMap()) {
+            mtX1 = mtY1 = mtX2 = mtY2 = 0;
+            hsX1 = hsY1 = hsX2 = hsY2 = 0;
+            heightMap = false;
+            return;
+        }
+        boolean elev = ModSettings.getBool(ModSettings.HEIGHT_MAP);
+        if (!elev) {
+            heightMap = false;
+        }
+        g.pose().pushPose();
+        g.pose().translate(0.0F, 0.0F, 570.0F);
+        if (elev) {
+            String ml = I18nGet(heightMap ? "panoptic.seed.mode_height" : "panoptic.seed.mode_biome");
+            int mw = this.font.width(ml) + 12;
+            mtX2 = mRight - 8;
+            mtX1 = mtX2 - mw;
+            mtY2 = mBottom - 8;
+            mtY1 = mtY2 - 14;
+            boolean mhov = mouseX >= mtX1 && mouseX <= mtX2 && mouseY >= mtY1 && mouseY <= mtY2;
+            g.fill(mtX1, mtY1, mtX2, mtY2, heightMap ? GuiStyle.T(0x88E8C06C) : mhov ? GuiStyle.T(0xE0241E12) : GuiStyle.T(0xD01A150D));
+            GuiStyle.rect(g, mtX1, mtY1, mtX2, mtY2, heightMap || mhov ? GuiStyle.ACCENT : GuiStyle.T(0xFF6A5630));
+            g.drawString(this.font, ml, mtX1 + 6, mtY1 + 3, heightMap || mhov ? GuiStyle.TEXT : GuiStyle.MUTED, false);
+        } else {
+            mtX1 = mtY1 = mtX2 = mtY2 = 0;
+        }
+        if (heightMap) {
+            hsX1 = hsY1 = hsX2 = hsY2 = 0;
+            g.pose().popPose();
+            return;
+        }
+        hsX2 = mRight - 8;
+        hsX1 = hsX2 - 8;
+        hsY1 = mTop + 24;
+        hsY2 = mBottom - 34;
+        int trackH = hsY2 - hsY1;
+        if (trackH < 52) {
+            hsX1 = hsY1 = hsX2 = hsY2 = 0;
+            g.pose().popPose();
+            return;
+        }
+        int gap = 13;
+        g.fill(hsX1 - 2, hsY1 - 2, hsX2 + 2, hsY2 + 2, GuiStyle.T(0xD41A150D));
+        GuiStyle.rect(g, hsX1 - 2, hsY1 - 2, hsX2 + 2, hsY2 + 2, GuiStyle.T(0xFF6A5630));
+        int bands = trackH - gap;
+        for (int i = 0; i < bands; i++) {
+            float f = (float) i / Math.max(1, bands - 1);
+            g.fill(hsX1, hsY1 + gap + i, hsX2, hsY1 + gap + i + 1, lerpColor(0xFF3C3018, 0xFF0C0906, f));
+        }
+        g.fill(hsX1, hsY1, hsX2, hsY1 + gap, heightSurface ? GuiStyle.T(0xAA5FA83E) : GuiStyle.T(0x442E3A1E));
+        g.fill(hsX1, hsY1 + gap - 1, hsX2, hsY1 + gap, GuiStyle.ACCENT);
+        int hy;
+        if (heightSurface) {
+            hy = hsY1 + gap / 2 - 3;
+        } else {
+            double t = (double) (hMaxY() - heightY) / Math.max(1, hMaxY() - hMinY());
+            hy = (int) Math.round(hsY1 + gap + Mth.clamp(t, 0.0, 1.0) * (trackH - gap - 6));
+        }
+        boolean act = heightDragging || (mouseX >= hsX1 - 6 && mouseX <= hsX2 + 6 && mouseY >= hsY1 - 2 && mouseY <= hsY2 + 2);
+        g.fill(hsX1 - 3, hy - 2, hsX2 + 3, hy + 4, act ? GuiStyle.ACCENT : GuiStyle.T(0xFFCB9C4E));
+        GuiStyle.rect(g, hsX1 - 3, hy - 2, hsX2 + 3, hy + 4, 0xFF120D06);
+        g.fill(hsX1, hy, hsX2, hy + 1, 0x44000000);
+        String lbl = heightSurface ? I18nGet("panoptic.seed.height_surface")
+                : I18nGet("panoptic.seed.height_y") + " " + heightY;
+        int lw = this.font.width(lbl);
+        int lx = hsX1 - 7 - lw;
+        int ly = Mth.clamp(hy - 3, mTop + 2, mBottom - 12);
+        g.fill(lx - 3, ly - 2, lx + lw + 3, ly + 10, GuiStyle.T(act ? 0xF01A150D : 0xB01A150D));
+        GuiStyle.rect(g, lx - 3, ly - 2, lx + lw + 3, ly + 10, act ? GuiStyle.ACCENT : GuiStyle.T(0xFF6A5630));
+        g.drawString(this.font, lbl, lx, ly, act ? GuiStyle.TEXT : GuiStyle.MUTED, false);
+        g.pose().popPose();
+    }
+
+    private static int lerpColor(int a, int b, float t) {
+        int ar = (a >> 16) & 255, ag = (a >> 8) & 255, ab = a & 255;
+        int br = (b >> 16) & 255, bg = (b >> 8) & 255, bb = b & 255;
+        int r = (int) (ar + (br - ar) * t);
+        int gg = (int) (ag + (bg - ag) * t);
+        int bl = (int) (ab + (bb - ab) * t);
+        return 0xFF000000 | (r << 16) | (gg << 8) | bl;
+    }
+
+    private void heightSliderSet(double my) {
+        int trackH = hsY2 - hsY1;
+        int gap = 13;
+        if (my <= hsY1 + gap) {
+            heightSurface = true;
+            return;
+        }
+        double t = Mth.clamp((my - hsY1 - gap) / Math.max(1, trackH - gap - 6), 0.0, 1.0);
+        heightSurface = false;
+        heightY = (int) Math.round(hMaxY() - t * (hMaxY() - hMinY()));
+    }
+
     private void renderTopBar(GuiGraphics g, int left, int top, int right, int mouseX, int mouseY) {
         g.fill(left + 1, top + 1, right - 1, top + TOP_H - 1, GuiStyle.TITLE);
         g.fill(left + 1, top + TOP_H - 1, right - 1, top + TOP_H, GuiStyle.T(0x3DE8C06C));
@@ -1645,18 +1790,26 @@ public class SeedMapScreen extends Screen implements TextTyping {
         int wx = (int) Math.floor(camX + (mouseX - mcx()) / zoom);
         int wz = (int) Math.floor(camZ + (mouseY - mcy()) / zoom);
         boolean over = mouseX >= mLeft && mouseX <= mRight && mouseY >= mTop && mouseY <= mBottom;
+        boolean hmode = map.heightMap && map.canHeightMap();
         String coords = over ? ("X " + wx + "   Z " + wz) : "—";
+        if (over && hmode && hoverHeight != Integer.MIN_VALUE) {
+            coords += "   Y " + hoverHeight;
+        }
         g.drawString(this.font, coords, left + 7, by + 5, GuiStyle.TEXT, false);
         if (over) {
-            long hk = TileLayer.key(0, wx >> 2, wz >> 2);
+            long hk = TileLayer.key(hmode ? 1 : 0, wx >> 2, wz >> 2);
             if (hk != hoverReqKey) {
                 hoverReqKey = hk;
+                hoverHeight = Integer.MIN_VALUE;
                 SeedMap m = map;
                 int fwx = wx;
                 int fwz = wz;
                 pool.submit(() -> {
                     if (m != null) {
                         hoverBiome = m.biome(fwx, fwz);
+                        if (hmode) {
+                            hoverHeight = m.surfaceHeight(fwx, fwz);
+                        }
                     }
                 });
             }
@@ -1769,6 +1922,17 @@ public class SeedMapScreen extends Screen implements TextTyping {
             if (button == 0 && clickDimSelector(mouseX, mouseY)) {
                 return true;
             }
+            if (button == 0 && mouseX >= mtX1 && mouseX <= mtX2 && mouseY >= mtY1 && mouseY <= mtY2) {
+                heightMap = !heightMap;
+                tileLayer.invalidate();
+                sound(1.0F);
+                return true;
+            }
+            if (button == 0 && mouseX >= hsX1 - 4 && mouseX <= hsX2 + 4 && mouseY >= hsY1 && mouseY <= hsY2) {
+                heightDragging = true;
+                heightSliderSet(mouseY);
+                return true;
+            }
             if (button == 0) {
                 dragging = true;
                 moved = false;
@@ -1799,6 +1963,10 @@ public class SeedMapScreen extends Screen implements TextTyping {
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dx, double dy) {
+        if (heightDragging && button == 0) {
+            heightSliderSet(mouseY);
+            return true;
+        }
         if (dragging && button == 0) {
             if (Math.abs(mouseX - pressX) > 2 || Math.abs(mouseY - pressY) > 2) {
                 moved = true;
@@ -1814,6 +1982,14 @@ public class SeedMapScreen extends Screen implements TextTyping {
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        if (heightDragging && button == 0) {
+            heightDragging = false;
+            tileLayer.invalidate();
+            SeedPrefs.HEIGHT_SURFACE = heightSurface;
+            SeedPrefs.HEIGHT_Y = heightY;
+            SeedPrefs.saveHeight();
+            return true;
+        }
         if (dragging && button == 0) {
             dragging = false;
             if (!moved && mouseX >= mLeft && mouseX <= mRight && mouseY >= mTop && mouseY <= mBottom) {
@@ -1859,21 +2035,65 @@ public class SeedMapScreen extends Screen implements TextTyping {
             zoomAnchorY = mouseY;
             return true;
         }
-        return super.mouseScrolled(mouseX, mouseY, 0, delta);
+        return super.mouseScrolled(mouseX, mouseY, scrollX, delta);
     }
 
     private void clickAt(int wx, int wz) {
         if (map != null && map.currentWorld && this.minecraft.player != null) {
-            if (this.minecraft.player.level().dimension() == map.dim) {
-                this.minecraft.player.connection.sendCommand("tp " + wx + " ~ " + wz);
+            IntegratedServer server = this.minecraft.getSingleplayerServer();
+            if (server != null) {
+                teleportToSurface(server, wx, wz);
+                sound(1.5F);
+            } else if (Perms.allowed(Perms.Feature.SEED_TELEPORT)) {
+                TeleportSurfacePacket.send(new TeleportSurfacePacket(map.dim.location(), wx, wz));
+                sound(1.5F);
             } else {
-                this.minecraft.player.connection.sendCommand(
-                        "execute in " + map.dim.location() + " run tp @s " + wx + " ~ " + wz);
+                Perms.deny();
             }
-            sound(1.5F);
         } else {
             copy(wx + " " + wz);
         }
+    }
+
+    private void teleportToSurface(IntegratedServer server, int wx, int wz) {
+        ResourceKey<Level> dim = map.dim;
+        UUID id = this.minecraft.player.getUUID();
+        server.execute(() -> {
+            try {
+                ServerLevel sl = server.getLevel(dim);
+                ServerPlayer sp = server.getPlayerList().getPlayer(id);
+                if (sl == null || sp == null) {
+                    return;
+                }
+                sl.getChunk(wx >> 4, wz >> 4);
+                double y = safeSurfaceY(sl, wx, wz);
+                sp.teleportTo(sl, wx + 0.5, y, wz + 0.5, sp.getYRot(), sp.getXRot());
+            } catch (Throwable ignored) {
+            }
+        });
+    }
+
+    private static double safeSurfaceY(ServerLevel sl, int wx, int wz) {
+        int minY = sl.getMinBuildHeight();
+        int maxY = sl.getMaxBuildHeight();
+        if (!sl.dimensionType().hasCeiling()) {
+            int h = sl.getHeight(Heightmap.Types.MOTION_BLOCKING, wx, wz);
+            return Mth.clamp(h, minY + 1, maxY - 1);
+        }
+        int start = Mth.clamp(sl.dimensionType().logicalHeight() - 2, minY + 1, maxY - 2);
+        BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
+        for (int y = start; y > minY; y--) {
+            BlockState floor = sl.getBlockState(p.set(wx, y, wz));
+            if (!floor.blocksMotion() || !floor.getFluidState().isEmpty()) {
+                continue;
+            }
+            BlockState a1 = sl.getBlockState(p.set(wx, y + 1, wz));
+            BlockState a2 = sl.getBlockState(p.set(wx, y + 2, wz));
+            if (!a1.blocksMotion() && a1.getFluidState().isEmpty() && !a2.blocksMotion()) {
+                return y + 1;
+            }
+        }
+        return start + 1;
     }
 
     private void centerOnPlayer() {

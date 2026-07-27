@@ -71,6 +71,10 @@
   "panoptic.seed.scale.many": "%s bloków",
   "panoptic.seed.scale.thousand": "%s tys. bloków",
   "panoptic.seed.filter_n": "Filtr:",
+  "panoptic.seed.height_surface": "Powierzchnia",
+  "panoptic.seed.height_y": "Y",
+  "panoptic.seed.mode_biome": "Biomy",
+  "panoptic.seed.mode_height": "Wysokość",
 
   "panoptic.struct.minecraft.ancient_city": "Starożytne miasto",
   "panoptic.struct.minecraft.bastion_remnant": "Pozostałość bastionu",
@@ -494,6 +498,7 @@
   "panoptic.adm.node.inspector": "Inspektor",
   "panoptic.adm.node.seed.view": "Ziarno świata",
   "panoptic.adm.node.seed.structures": "Struktury na mapie",
+  "panoptic.adm.node.seed.teleport": "Teleportacja",
   "panoptic.adm.node.trade": "Inspektor handlu",
   "panoptic.adm.node.trade.spawn": "Przyzywanie osadników",
   "panoptic.adm.node.screens": "Inspektor ekranu",

@@ -4,6 +4,7 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.mokich.panoptic.config.LogFeed;
+import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -32,7 +33,9 @@ public class Panoptic {
       ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON,
             PanopticConfig.SPEC);
       if (FMLEnvironment.dist.isClient()) {
-         System.setProperty("java.awt.headless", "false");
+         if (Util.getPlatform() != Util.OS.OSX) {
+            System.setProperty("java.awt.headless", "false");
+         }
          LogFeed.attach();
       }
    }
@@ -54,6 +57,7 @@ public class Panoptic {
       PERMS_CHANNEL.messageBuilder(StructRegionPackets.Result.class, 10).encoder(StructRegionPackets.Result::encode).decoder(StructRegionPackets.Result::decode).consumerNetworkThread(StructRegionPackets.Result::handle).add();
       PERMS_CHANNEL.messageBuilder(BiomeTilePackets.Request.class, 11).encoder(BiomeTilePackets.Request::encode).decoder(BiomeTilePackets.Request::decode).consumerNetworkThread(BiomeTilePackets.Request::handle).add();
       PERMS_CHANNEL.messageBuilder(BiomeTilePackets.Result.class, 12).encoder(BiomeTilePackets.Result::encode).decoder(BiomeTilePackets.Result::decode).consumerNetworkThread(BiomeTilePackets.Result::handle).add();
+      PERMS_CHANNEL.messageBuilder(TeleportSurfacePacket.class, 13).encoder(TeleportSurfacePacket::encode).decoder(TeleportSurfacePacket::decode).consumerNetworkThread(TeleportSurfacePacket::handle).add();
       PERMS_CHANNEL.build();
    }
 }

@@ -71,6 +71,10 @@
   "panoptic.seed.scale.many": "%s blok",
   "panoptic.seed.scale.thousand": "%s bin blok",
   "panoptic.seed.filter_n": "Filtre:",
+  "panoptic.seed.height_surface": "Yüzey",
+  "panoptic.seed.height_y": "Y",
+  "panoptic.seed.mode_biome": "Biyomlar",
+  "panoptic.seed.mode_height": "Yükseklik",
 
   "panoptic.struct.minecraft.ancient_city": "Kadim Şehir",
   "panoptic.struct.minecraft.bastion_remnant": "Bastiyon Kalıntısı",
@@ -494,6 +498,7 @@
   "panoptic.adm.node.inspector": "İnceleyici",
   "panoptic.adm.node.seed.view": "Dünya tohumu",
   "panoptic.adm.node.seed.structures": "Haritadaki yapılar",
+  "panoptic.adm.node.seed.teleport": "Işınlanma",
   "panoptic.adm.node.trade": "Ticaret İnceleyici",
   "panoptic.adm.node.trade.spawn": "Köylü çağırma",
   "panoptic.adm.node.screens": "Ekran İnceleyici",

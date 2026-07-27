@@ -71,6 +71,10 @@
   "panoptic.seed.scale.many": "%s블록",
   "panoptic.seed.scale.thousand": "%s천 블록",
   "panoptic.seed.filter_n": "필터:",
+  "panoptic.seed.height_surface": "표면",
+  "panoptic.seed.height_y": "Y",
+  "panoptic.seed.mode_biome": "생물군계",
+  "panoptic.seed.mode_height": "높이",
 
   "panoptic.struct.minecraft.ancient_city": "고대 도시",
   "panoptic.struct.minecraft.bastion_remnant": "요새 잔해",
@@ -494,6 +498,7 @@
   "panoptic.adm.node.inspector": "검사기",
   "panoptic.adm.node.seed.view": "세계 시드",
   "panoptic.adm.node.seed.structures": "지도상의 구조물",
+  "panoptic.adm.node.seed.teleport": "순간이동",
   "panoptic.adm.node.trade": "거래 검사기",
   "panoptic.adm.node.trade.spawn": "주민 소환",
   "panoptic.adm.node.screens": "화면 검사기",

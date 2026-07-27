@@ -14,6 +14,7 @@ public final class Perms {
         INSPECTOR("panoptic.inspector"),
         SEED_VIEW("panoptic.seed.view"),
         SEED_STRUCTURES("panoptic.seed.structures"),
+        SEED_TELEPORT("panoptic.seed.teleport"),
         TRADE("panoptic.trade"),
         TRADE_SPAWN("panoptic.trade.spawn"),
         SCREENS("panoptic.screens"),
@@ -44,7 +45,7 @@ public final class Perms {
         if (p.hasPermissions(2)) {
             return true;
         }
-        if (f == Feature.TRADE_SPAWN || f == Feature.SCREENS_GIVE || f == Feature.ADMIN) {
+        if (f == Feature.TRADE_SPAWN || f == Feature.SCREENS_GIVE || f == Feature.SEED_TELEPORT || f == Feature.ADMIN) {
             return false;
         }
         return PanopticConfig.openAccess() && singleWorld();

@@ -26,6 +26,7 @@ public final class ModSettings {
     public static final String WHEEL_HOLD_MS = "wheel_hold_ms";
     public static final String WHEEL_PARTICLES = "wheel_particles";
     public static final String UI_SOUNDS = "ui_sounds";
+    public static final String HEIGHT_MAP = "height_map";
     public static final String THEME_R = "theme_r";
     public static final String THEME_G = "theme_g";
     public static final String THEME_B = "theme_b";
@@ -74,6 +75,7 @@ public final class ModSettings {
         VALUES.put(WHEEL_HOLD_MS, 60.0);
         VALUES.put(WHEEL_PARTICLES, 1.0);
         VALUES.put(UI_SOUNDS, 1.0);
+        VALUES.put(HEIGHT_MAP, 0.0);
         VALUES.put(THEME_R, 232.0);
         VALUES.put(THEME_G, 192.0);
         VALUES.put(THEME_B, 108.0);

@@ -17,6 +17,8 @@ public final class SeedPrefs {
     public static final LinkedHashSet<ResourceLocation> HIDDEN = new LinkedHashSet<>();
     public static final LinkedHashSet<ResourceLocation> SHOWN = new LinkedHashSet<>();
     public static final LinkedHashMap<String, Boolean> HISTORY = new LinkedHashMap<>();
+    public static boolean HEIGHT_SURFACE = true;
+    public static int HEIGHT_Y = 63;
 
     private static volatile Set<ResourceLocation> HIDDEN_EFF = Set.of();
     private static boolean filtersLoaded;
@@ -36,6 +38,32 @@ public final class SeedPrefs {
         loadHidden();
         loadShown();
         loadHistory();
+        loadHeight();
+    }
+
+    private static void loadHeight() {
+        try {
+            Path p = path("seedheight");
+            if (Files.isRegularFile(p)) {
+                String s = Files.readString(p).trim();
+                if (s.isEmpty() || s.equals("surface")) {
+                    HEIGHT_SURFACE = true;
+                } else {
+                    HEIGHT_Y = Integer.parseInt(s);
+                    HEIGHT_SURFACE = false;
+                }
+            }
+        } catch (Throwable ignored) {
+        }
+    }
+
+    public static void saveHeight() {
+        try {
+            Path p = path("seedheight");
+            Files.createDirectories(p.getParent());
+            Files.writeString(p, HEIGHT_SURFACE ? "surface" : String.valueOf(HEIGHT_Y));
+        } catch (Throwable ignored) {
+        }
     }
 
     public static boolean structHidden(ResourceLocation id) {

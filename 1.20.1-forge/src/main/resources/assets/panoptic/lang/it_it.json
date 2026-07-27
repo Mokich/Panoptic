@@ -71,6 +71,10 @@
   "panoptic.seed.scale.many": "%s blocchi",
   "panoptic.seed.scale.thousand": "%s mila blocchi",
   "panoptic.seed.filter_n": "Filtro:",
+  "panoptic.seed.height_surface": "Superficie",
+  "panoptic.seed.height_y": "Y",
+  "panoptic.seed.mode_biome": "Biomi",
+  "panoptic.seed.mode_height": "Altezza",
 
   "panoptic.struct.minecraft.ancient_city": "Città antica",
   "panoptic.struct.minecraft.bastion_remnant": "Resto del bastione",
@@ -494,6 +498,7 @@
   "panoptic.adm.node.inspector": "Ispettore",
   "panoptic.adm.node.seed.view": "Seed del mondo",
   "panoptic.adm.node.seed.structures": "Strutture sulla mappa",
+  "panoptic.adm.node.seed.teleport": "Teletrasporto",
   "panoptic.adm.node.trade": "Ispettore degli scambi",
   "panoptic.adm.node.trade.spawn": "Evocazione villici",
   "panoptic.adm.node.screens": "Ispettore schermate",

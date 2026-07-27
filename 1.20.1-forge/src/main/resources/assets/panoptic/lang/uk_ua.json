@@ -71,6 +71,10 @@
   "panoptic.seed.scale.many": "%s блоків",
   "panoptic.seed.scale.thousand": "%s тис. блоків",
   "panoptic.seed.filter_n": "Фільтр:",
+  "panoptic.seed.height_surface": "Поверхня",
+  "panoptic.seed.height_y": "Y",
+  "panoptic.seed.mode_biome": "Біоми",
+  "panoptic.seed.mode_height": "Висота",
 
   "panoptic.struct.minecraft.ancient_city": "Стародавнє місто",
   "panoptic.struct.minecraft.bastion_remnant": "Рештки бастіону",
@@ -494,6 +498,7 @@
   "panoptic.adm.node.inspector": "Інспектор",
   "panoptic.adm.node.seed.view": "Сід світу",
   "panoptic.adm.node.seed.structures": "Структури на карті",
+  "panoptic.adm.node.seed.teleport": "Телепорт",
   "panoptic.adm.node.trade": "Торг-Інспектор",
   "panoptic.adm.node.trade.spawn": "Спавн селянина",
   "panoptic.adm.node.screens": "Скрін-Інспектор",

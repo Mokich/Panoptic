@@ -7,12 +7,14 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.Util;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.mokich.panoptic.config.LogFeed;
 import net.mokich.panoptic.event.InteractionEventHandler;
 import net.mokich.panoptic.event.PauseMenuHandler;
 import net.mokich.panoptic.event.ScreenCaptureHandler;
 import net.mokich.panoptic.network.AdminEditPacket;
+import net.mokich.panoptic.network.TeleportSurfacePacket;
 import net.mokich.panoptic.network.AdminOpenPacket;
 import net.mokich.panoptic.network.AdminStatePacket;
 import net.mokich.panoptic.network.AllStructuresPacket;
@@ -29,7 +31,9 @@ import net.mokich.panoptic.network.StructureResultPacket;
 public final class PanopticClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        System.setProperty("java.awt.headless", "false");
+        if (Util.getPlatform() != Util.OS.OSX) {
+            System.setProperty("java.awt.headless", "false");
+        }
         LogFeed.attach();
         registerPayloads();
         registerReceivers();
@@ -51,6 +55,7 @@ public final class PanopticClient implements ClientModInitializer {
         PayloadTypeRegistry.playC2S().register(StructRegionPackets.Request.TYPE, StructRegionPackets.Request.STREAM_CODEC);
         PayloadTypeRegistry.playS2C().register(StructRegionPackets.Result.TYPE, StructRegionPackets.Result.STREAM_CODEC);
         PayloadTypeRegistry.playC2S().register(BiomeTilePackets.Request.TYPE, BiomeTilePackets.Request.STREAM_CODEC);
+        PayloadTypeRegistry.playC2S().register(TeleportSurfacePacket.TYPE, TeleportSurfacePacket.STREAM_CODEC);
         PayloadTypeRegistry.playS2C().register(BiomeTilePackets.Result.TYPE, BiomeTilePackets.Result.STREAM_CODEC);
     }
 

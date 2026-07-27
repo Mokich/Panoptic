@@ -33,6 +33,21 @@ public final class TileLayer {
     private final Map<Long, Tile> tiles = new HashMap<>();
     private int texSeq;
     private volatile int generation;
+    private volatile long visSubDone;
+    private volatile long visSubTotal;
+    private volatile int curStep;
+
+    public float progress() {
+        long total = visSubTotal;
+        if (total <= 0) {
+            return 1F;
+        }
+        return Mth.clamp((float) visSubDone / total, 0F, 1F);
+    }
+
+    public boolean loading() {
+        return visSubDone < visSubTotal;
+    }
 
     public static long key(int step, int x, int z) {
         return ((long) (step & 0x3FF) << 48) | (((long) x & 0xFFFFFFL) << 24) | ((long) z & 0xFFFFFFL);
@@ -55,6 +70,7 @@ public final class TileLayer {
         double mcx = (mLeft + mRight) / 2.0;
         double mcy = (mTop + mBottom) / 2.0;
         int step = stepFor(zoom);
+        curStep = step;
         int tw = RES * step;
         double wl = camX + (mLeft - mcx) / zoom;
         double wt = camZ + (mTop - mcy) / zoom;
@@ -69,6 +85,8 @@ public final class TileLayer {
         }
         RenderSystem.setShaderColor(1, 1, 1, 1);
         int uploads = 0;
+        long doneSum = 0;
+        long totalSum = 0;
         long now = System.currentTimeMillis();
         for (int tz = tzMin; tz <= tzMax; tz++) {
             for (int tx = txMin; tx <= txMax; tx++) {
@@ -83,6 +101,8 @@ public final class TileLayer {
                 }
                 Tile t = tiles.computeIfAbsent(k, kk -> request(map, pool, fstep, ftx, ftz));
                 t.keep = true;
+                doneSum += t.subDone;
+                totalSum += t.subTotal;
                 if (t.state >= 1 && (t.state == 2 || uploads < 4)) {
                     if (t.state == 1) {
                         uploads++;
@@ -96,6 +116,8 @@ public final class TileLayer {
                 }
             }
         }
+        visSubDone = doneSum;
+        visSubTotal = totalSum;
         evict(step);
     }
 
@@ -110,10 +132,15 @@ public final class TileLayer {
 
     private Tile request(SeedMap map, ExecutorService pool, int step, int tx, int tz) {
         Tile t = new Tile(step, tx, tz);
+        if (map.heightMap && map.canHeightMap()) {
+            int side = Math.min(RES, RES * step / 16);
+            t.subTotal = Math.max(1, side * side);
+        }
         String ck = cacheKey(map, step, tx, tz);
         int[] cached = CACHE.get(ck);
         if (cached != null) {
             t.argb = cached;
+            t.subDone = t.subTotal;
             t.state = 1;
             return t;
         }
@@ -126,7 +153,7 @@ public final class TileLayer {
                 return t;
             }
             pool.submit(() -> {
-                if (g != generation || m == null) {
+                if (g != generation || m == null || step != curStep) {
                     return;
                 }
                 Holder<Biome>[] pal = RemoteBiomes.resolve(payload);
@@ -137,20 +164,64 @@ public final class TileLayer {
                 }
                 CACHE.put(ck, px);
                 t.argb = px;
+                t.subDone = t.subTotal;
                 t.state = 1;
             });
             return t;
         }
         pool.submit(() -> {
-            if (g != generation || m == null) {
+            if (g != generation || m == null || step != curStep) {
                 return;
             }
-            int[] px = build(m, step, tx, tz, (pxi, pz) -> m.biome(tx * RES * step + pxi * step, tz * RES * step + pz * step));
+            int[] px;
+            if (m.heightMap && m.canHeightMap()) {
+                int baseX = tx * RES * step;
+                int baseZ = tz * RES * step;
+                int[] out = new int[RES * RES];
+                Map<Long, int[]> grids = new HashMap<>();
+                boolean batch = m.canBatchHeight();
+                for (int pz = 0; pz < RES; pz++) {
+                    int bz = baseZ + pz * step;
+                    int cz = bz >> 4;
+                    int lz = bz & 15;
+                    for (int pxi = 0; pxi < RES; pxi++) {
+                        int bx = baseX + pxi * step;
+                        int cx = bx >> 4;
+                        int lx = bx & 15;
+                        int h;
+                        if (batch) {
+                            long gk = (((long) cx) << 32) | (cz & 0xFFFFFFFFL);
+                            int[] grid = grids.get(gk);
+                            if (grid == null) {
+                                grid = m.chunkSurface(cx, cz, step);
+                                if (grid == null) {
+                                    batch = false;
+                                    out[pz * RES + pxi] = m.elevationColor(m.surfaceHeight(bx, bz));
+                                    continue;
+                                }
+                                grids.put(gk, grid);
+                                t.subDone++;
+                            }
+                            h = grid[lz * 16 + lx];
+                        } else {
+                            h = m.surfaceHeight(bx, bz);
+                        }
+                        out[pz * RES + pxi] = m.elevationColor(h);
+                    }
+                    if (g != generation || step != curStep) {
+                        return;
+                    }
+                }
+                px = out;
+            } else {
+                px = build(m, step, tx, tz, (pxi, pz) -> m.biome(tx * RES * step + pxi * step, tz * RES * step + pz * step));
+            }
             if (g != generation) {
                 return;
             }
             CACHE.put(ck, px);
             t.argb = px;
+            t.subDone = t.subTotal;
             t.state = 1;
         });
         return t;
@@ -161,30 +232,11 @@ public final class TileLayer {
     }
 
     private static int[] build(SeedMap m, int step, int tx, int tz, BiomeAt src) {
-        int tw = RES * step;
         int[] px = new int[RES * RES];
-        boolean dither = step < 16;
-        Object[] prevRow = new Object[RES];
         for (int pz = 0; pz < RES; pz++) {
-            Object left = null;
             for (int pxi = 0; pxi < RES; pxi++) {
-                int wx = tx * tw + pxi * step;
-                int wz = tz * tw + pz * step;
                 Holder<Biome> b = src.get(pxi, pz);
-                int c = b == null ? 0xFF14100A : m.color(b);
-                if (dither) {
-                    int hash = wx * 0x2545F491 + wz * 0x9E3779B9;
-                    hash ^= hash >>> 15;
-                    hash *= 0x85EBCA6B;
-                    hash ^= hash >>> 13;
-                    c = shade(c, ((hash & 7) - 3) * 3);
-                }
-                if ((left != null && b != left) || (prevRow[pxi] != null && b != prevRow[pxi])) {
-                    c = shade(c, -30);
-                }
-                px[pz * RES + pxi] = c;
-                prevRow[pxi] = b;
-                left = b;
+                px[pz * RES + pxi] = b == null ? 0xFF14100A : m.color(b);
             }
         }
         return px;
@@ -192,14 +244,7 @@ public final class TileLayer {
 
     private static String cacheKey(SeedMap map, int step, int tx, int tz) {
         return (map.serverBiomes() ? "s|" : "4|") + map.seed + "|" + map.dim.location()
-                + "|" + step + "|" + tx + "|" + tz;
-    }
-
-    private static int shade(int argb, int delta) {
-        int r = Mth.clamp(((argb >> 16) & 0xFF) + delta, 0, 255);
-        int gg = Mth.clamp(((argb >> 8) & 0xFF) + delta, 0, 255);
-        int b = Mth.clamp((argb & 0xFF) + delta, 0, 255);
-        return (argb & 0xFF000000) | (r << 16) | (gg << 8) | b;
+                + "|" + (map.heightMap ? "H" : "B") + map.sampleY + "|" + step + "|" + tx + "|" + tz;
     }
 
     private void evict(int curStep) {
@@ -220,6 +265,8 @@ public final class TileLayer {
         volatile int state;
         volatile int[] argb;
         volatile long retryAt;
+        volatile int subDone;
+        volatile int subTotal = 1;
         boolean keep = true;
         ResourceLocation id;
         DynamicTexture tex;

@@ -8,7 +8,6 @@
   "key.panoptic.invert_sel": "Invert selection",
   "key.panoptic.clear_sel": "Clear selection",
   "key.panoptic.screengrab": "Smart screenshot",
-
   "panoptic.seed.title": "Seed Inspector",
   "panoptic.seed.help_title": "Seed Inspector",
   "panoptic.seed.help_sum": "§7A noise and structure map of your world, showing biomes and structures.",
@@ -71,7 +70,6 @@
   "panoptic.seed.scale.many": "%s blocks",
   "panoptic.seed.scale.thousand": "%sk blocks",
   "panoptic.seed.filter_n": "Filter:",
-
   "panoptic.struct.minecraft.ancient_city": "Ancient City",
   "panoptic.struct.minecraft.bastion_remnant": "Bastion Remnant",
   "panoptic.struct.minecraft.buried_treasure": "Buried Treasure",
@@ -105,14 +103,12 @@
   "panoptic.struct.minecraft.village_savanna": "Savanna Village",
   "panoptic.struct.minecraft.village_snowy": "Snowy Village",
   "panoptic.struct.minecraft.village_taiga": "Taiga Village",
-
   "panoptic.type.block": "Block",
   "panoptic.type.item": "Item",
   "panoptic.type.entity": "Entity",
   "panoptic.type.structure": "Structure",
   "panoptic.type.biome": "Biome",
   "panoptic.type.fluid": "Fluid",
-
   "panoptic.gui.title": "Inspector",
   "panoptic.gui.mhelp_title": "Inspector",
   "panoptic.gui.mhelp_sum": "§7Peek inside any block/item/entity",
@@ -201,15 +197,12 @@
   "panoptic.gui.prev.no_display": "(hidden)",
   "panoptic.gui.prev.loading": "Loading… %s/%s",
   "panoptic.gui.prev.loading_dots": "Loading…",
-
   "panoptic.msg.captured": "Captured: %s",
   "panoptic.msg.already": "Already captured: %s",
-
   "panoptic.value.none": "(None)",
   "panoptic.value.no_properties": "(No properties)",
   "panoptic.value.yes": "Yes",
   "panoptic.value.no": "No",
-
   "panoptic.field.id": "ID",
   "panoptic.field.translation_key": "Translation key",
   "panoptic.field.mod": "Mod",
@@ -273,7 +266,6 @@
   "panoptic.field.max_health": "Max health",
   "panoptic.field.move_speed": "Movement speed",
   "panoptic.field.follow_range": "Follow range",
-
   "panoptic.vill.title": "Trade Inspector",
   "panoptic.vill.back": "Back",
   "panoptic.vill.copy": "Copy",
@@ -312,7 +304,6 @@
   "panoptic.vill.copy_all_tip": "Copy every pack villager as text",
   "panoptic.vill.pick_item": "Pick an item on the left",
   "panoptic.vill.goto": "Go to villager",
-
   "panoptic.bind.main": "Main menu",
   "panoptic.bind.inspector": "Open Inspector",
   "panoptic.bind.villagers": "Open Trade Inspector",
@@ -332,13 +323,11 @@
   "panoptic.bind.view_draw": "Draw",
   "panoptic.bind.view_reset": "Reset view",
   "panoptic.bind.view_delete": "Delete screenshot",
-
   "panoptic.tool.inspector": "Inspector",
   "panoptic.tool.map": "Seed Inspector",
   "panoptic.tool.villagers": "Trade Inspector",
   "panoptic.tool.settings": "Settings",
   "panoptic.tool.screens": "Screen Inspector",
-
   "panoptic.main.desc.screens": "A catalog of all your smart screenshots",
   "panoptic.main.title": "Panoptic",
   "panoptic.main.help_title": "Panoptic",
@@ -352,7 +341,6 @@
   "panoptic.main.desc.map": "Biome and structure map",
   "panoptic.main.desc.villagers": "All possible villager trades in game",
   "panoptic.main.desc.settings": "Binds and mod options",
-
   "panoptic.set.draw": "Screenshot drawing",
   "panoptic.set.theme": "UI theme",
   "panoptic.set.theme_r": "Red (R)",
@@ -385,7 +373,6 @@
   "panoptic.set.off": "Off",
   "panoptic.set.all": "All",
   "panoptic.set.zero_all": "Type 0 if you want to see the full logs",
-
   "panoptic.grab.select": "Region select",
   "panoptic.grab.world_title": "World",
   "panoptic.grab.take": "Capture",
@@ -398,7 +385,6 @@
   "panoptic.grab.tool_done": "Done",
   "panoptic.grab.tool_cancel": "Cancel",
   "panoptic.grab.need_screen": "Open a screen first",
-
   "panoptic.screens.blocks": "Blocks",
   "panoptic.screens.palette": "Palette",
   "panoptic.screens.entities": "Entities",
@@ -468,7 +454,6 @@
   "panoptic.screens.given_n": "Items given: %s",
   "panoptic.screens.no_rights": "You don't have permission",
   "panoptic.screens.inv_full": "Inventory full",
-
   "panoptic.pause.open": "The main Panoptic interface",
   "panoptic.perm.denied": "You don't have permission to use this feature",
   "panoptic.perm.locked": "§cLocked: you don't have permission for this interface.",
@@ -506,7 +491,6 @@
   "panoptic.adm.help_b4": "If your server uses LuckPerms, you can grant the `panoptic.admin` permission through it, allowing the player to access this interface.",
   "panoptic.adm.help_b5": "The default group applies to every player until they are assigned to a different group.",
   "panoptic.adm.help_b6": "Each player permission has three states: 'Dash' — inherits the permission from the group; 'Checkmark' — allowed; 'Cross' — denied.",
-
   "panoptic.dash.seed": "Seed",
   "panoptic.dash.world": "World",
   "panoptic.dash.perf": "Performance",
@@ -551,5 +535,12 @@
   "panoptic.dash.log_copy": "Select",
   "panoptic.dash.copy_sel": "Copy (%s)",
   "panoptic.dash.clear_sel": "Clear",
-  "panoptic.dash.log_bottom": "Scroll down"
+  "panoptic.dash.log_bottom": "Scroll down",
+  "panoptic.seed.loading": "Loading map…",
+  "panoptic.seed.height_surface": "Surface",
+  "panoptic.seed.height_y": "Y",
+  "panoptic.seed.mode_biome": "Biomes",
+  "panoptic.seed.mode_height": "Elevation",
+  "panoptic.set.height_map": "Elevation map",
+  "panoptic.set.height_map_note": "Renders terrain elevation on the seed map. Heavy on the CPU - turn off if the map lags."
 }

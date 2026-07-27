@@ -8,7 +8,6 @@
   "key.panoptic.invert_sel": "Инвертировать выделение",
   "key.panoptic.clear_sel": "Снять выделение",
   "key.panoptic.screengrab": "Умный скриншот",
-
   "panoptic.seed.title": "Сид-инспектор",
   "panoptic.seed.help_title": "Сид-инспектор",
   "panoptic.seed.help_sum": "§7Карта шумов и структур вашего мира: она показывает биомы и прочие структуры.",
@@ -71,7 +70,6 @@
   "panoptic.seed.scale.many": "%s блоков",
   "panoptic.seed.scale.thousand": "%s тыс. блоков",
   "panoptic.seed.filter_n": "Фильтр:",
-
   "panoptic.struct.minecraft.ancient_city": "Древний город",
   "panoptic.struct.minecraft.bastion_remnant": "Бастион",
   "panoptic.struct.minecraft.buried_treasure": "Клад",
@@ -106,14 +104,12 @@
   "panoptic.struct.minecraft.village_savanna": "Деревня (саванна)",
   "panoptic.struct.minecraft.village_snowy": "Деревня (тундра)",
   "panoptic.struct.minecraft.village_taiga": "Деревня (тайга)",
-
   "panoptic.type.block": "Блок",
   "panoptic.type.item": "Предмет",
   "panoptic.type.entity": "Сущность",
   "panoptic.type.structure": "Структура",
   "panoptic.type.biome": "Биом",
   "panoptic.type.fluid": "Жидкость",
-
   "panoptic.gui.title": "Инспектор",
   "panoptic.gui.mhelp_title": "Инспектор",
   "panoptic.gui.mhelp_sum": "§7Заглядывает внутрь любого блока/предмета/сущности и т.д.",
@@ -202,15 +198,12 @@
   "panoptic.gui.prev.no_display": "(скрытая)",
   "panoptic.gui.prev.loading": "Загрузка… %s/%s",
   "panoptic.gui.prev.loading_dots": "Загрузка…",
-
   "panoptic.msg.captured": "Занесено: %s",
   "panoptic.msg.already": "Уже занесено: %s",
-
   "panoptic.value.none": "(Нет)",
   "panoptic.value.no_properties": "(Нет свойств)",
   "panoptic.value.yes": "Да",
   "panoptic.value.no": "Нет",
-
   "panoptic.field.id": "ID",
   "panoptic.field.translation_key": "Ключ перевода",
   "panoptic.field.mod": "Мод",
@@ -274,7 +267,6 @@
   "panoptic.field.max_health": "Здоровье",
   "panoptic.field.move_speed": "Скорость движения",
   "panoptic.field.follow_range": "Радиус слежения",
-
   "panoptic.vill.title": "Торг-Инспектор",
   "panoptic.vill.back": "Назад",
   "panoptic.vill.copy": "Копировать",
@@ -313,7 +305,6 @@
   "panoptic.vill.copy_all_tip": "Скопировать всех жителей сборки текстом",
   "panoptic.vill.pick_item": "Выберите предмет слева",
   "panoptic.vill.goto": "Перейти к жителю",
-
   "panoptic.bind.main": "Главное меню",
   "panoptic.bind.inspector": "Инспектор",
   "panoptic.bind.villagers": "Торг-Инспектор",
@@ -333,13 +324,11 @@
   "panoptic.bind.view_draw": "Рисование",
   "panoptic.bind.view_reset": "Сброс вида",
   "panoptic.bind.view_delete": "Удалить скриншот",
-
   "panoptic.tool.inspector": "Инспектор",
   "panoptic.tool.map": "Сид-Инспектор",
   "panoptic.tool.villagers": "Торг-Инспектор",
   "panoptic.tool.settings": "Настройки",
   "panoptic.tool.screens": "Скрин-Инспектор",
-
   "panoptic.main.desc.screens": "Каталог всех ваших умных скриншотов",
   "panoptic.main.title": "Panoptic",
   "panoptic.main.help_title": "Panoptic",
@@ -353,7 +342,6 @@
   "panoptic.main.desc.map": "Карта биомов и структур",
   "panoptic.main.desc.villagers": "Все возможные в игре торги жителей",
   "panoptic.main.desc.settings": "Управление и параметры мода",
-
   "panoptic.set.draw": "Рисование на скриншоте",
   "panoptic.set.theme": "Тема интерфейсов",
   "panoptic.set.theme_r": "Красный (R)",
@@ -386,7 +374,6 @@
   "panoptic.set.off": "Выкл",
   "panoptic.set.all": "Все",
   "panoptic.set.zero_all": "Напишите 0, если хотите видеть полные логи",
-
   "panoptic.grab.select": "Выделение области",
   "panoptic.grab.world_title": "Мир",
   "panoptic.grab.take": "Снять",
@@ -399,7 +386,6 @@
   "panoptic.grab.tool_done": "Готово",
   "panoptic.grab.tool_cancel": "Закрыть",
   "panoptic.grab.need_screen": "Откройте какой нибудь интерфейс",
-
   "panoptic.screens.blocks": "Блоков",
   "panoptic.screens.palette": "Палитра",
   "panoptic.screens.entities": "Сущностей",
@@ -469,7 +455,6 @@
   "panoptic.screens.given_n": "Выдано предметов: %s",
   "panoptic.screens.no_rights": "У вас нет прав",
   "panoptic.screens.inv_full": "Инвентарь полон",
-
   "panoptic.pause.open": "Главный интерфейс Panoptic",
   "panoptic.perm.denied": "У вас нет права на использование этой функции",
   "panoptic.perm.locked": "§cНедоступно: у вас нет права на этот интерфейс.",
@@ -507,7 +492,6 @@
   "panoptic.adm.help_b4": "Если на сервере стоит LuckPerms, право `panoptic.admin` можно выдать через него, тогда игрок получит доступ к этому интерфейсу.",
   "panoptic.adm.help_b5": "Группа default действует на всех игроков по умолчанию, пока им не назначена своя группа.",
   "panoptic.adm.help_b6": "У права игрока три положения: 'Прочерк' - Наследует право от группы; 'Галочка' — Разрешено, 'Крестик' — Запрещено.",
-
   "panoptic.dash.seed": "Сид",
   "panoptic.dash.world": "Мир",
   "panoptic.dash.perf": "Производительность",
@@ -552,5 +536,12 @@
   "panoptic.dash.log_copy": "Выделить",
   "panoptic.dash.copy_sel": "Копировать (%s)",
   "panoptic.dash.clear_sel": "Снять",
-  "panoptic.dash.log_bottom": "Перейти вниз"
+  "panoptic.dash.log_bottom": "Перейти вниз",
+  "panoptic.seed.loading": "Загрузка карты…",
+  "panoptic.seed.height_surface": "Поверхность",
+  "panoptic.seed.height_y": "Y",
+  "panoptic.seed.mode_biome": "Биомы",
+  "panoptic.seed.mode_height": "Рельеф",
+  "panoptic.set.height_map": "Карта высот",
+  "panoptic.set.height_map_note": "Показывает рельеф на карте сида. Нагружает процессор - выключите, если карта лагает."
 }

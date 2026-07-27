@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.Util;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.mokich.panoptic.config.LogFeed;
 import net.mokich.panoptic.event.InteractionEventHandler;
@@ -24,7 +25,9 @@ import net.mokich.panoptic.network.StructureResultPacket;
 public final class PanopticClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        System.setProperty("java.awt.headless", "false");
+        if (Util.getPlatform() != Util.OS.OSX) {
+            System.setProperty("java.awt.headless", "false");
+        }
         LogFeed.attach();
         registerReceivers();
         registerEvents();
