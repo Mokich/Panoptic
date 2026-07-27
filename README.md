@@ -3,7 +3,7 @@
 A client-side, in-game inspection toolkit for Minecraft modpacks.
 
 - **Inspector** - capture any block / item / entity / biome / fluid and see all its data (tags, states, NBT, properties) plus every asset/data file it comes from, across all mods and packs.
-- **Seed Inspector** - a biome & structure map of your world for any seed and dimension.
+- **Seed Inspector** - a biome, structure and terrain-elevation map of your world for any seed and dimension, with a depth slider and click-to-teleport onto the surface.
 - **Trade Inspector** - every villager trade in the entire pack, searchable by item.
 - **Screen Inspector** - smart screenshots that remember the full data of the items on screen.
 
@@ -53,7 +53,7 @@ Builds are reproducible: file order inside the jars is fixed and every zip entry
 Panoptic runs entirely on the client:
 
 - **Inspector** builds its data cards from the live game registries, then scans every loaded mod jar and datapack for the files behind an id (models, textures, recipes, loot tables, lang entries) and previews them in-game (JSON, NBT, PNG, OGG, structure files).
-- **Seed Inspector** runs vanilla worldgen on the client for the requested seed and dimension to compute biome tiles and structure placement. On dedicated servers, where the seed is unknown, the same data is served remotely by Panopticon.
+- **Seed Inspector** runs vanilla worldgen on the client for the requested seed and dimension to compute biome tiles, structure placement and a terrain-elevation map. A depth slider views biomes at any Y level, clicking the map teleports you onto the surface at that point, and the map shows the elevation under the cursor as a third coordinate. Tile generation is spread across background threads scaled to your CPU, shown by a load progress bar. On dedicated servers, where the seed is unknown, the same data is served remotely by Panopticon.
 - **Trade Inspector** samples every villager profession and trade tier into a searchable book, expanding enchanted-book listings; trades that can only be resolved server-side are re-sampled on the integrated server.
 - **Screen Inspector** records the draw operations of a GUI frame through mixins, so a screenshot can be reopened later with pan/zoom while every item on it keeps its full data on hover.
 
