@@ -1,7 +1,9 @@
 def fabricBuilds = ['1.21.1-fabric', '1.20.1-fabric']
-def loaderBuilds = ['1.20.1-forge', '1.21.1-forge', '1.21.1-neoforge'] + fabricBuilds
+def standaloneBuilds = fabricBuilds + ['26.1.2-neoforge', '26.1.2-forge']
+def wipBuilds = []
+def loaderBuilds = ['1.20.1-forge', '1.21.1-forge', '1.21.1-neoforge'] + standaloneBuilds + wipBuilds
 
-fabricBuilds.each { dir ->
+(standaloneBuilds + wipBuilds).each { dir ->
     def suffix = dir.replace('.', '_').replace('-', '_')
     tasks.register("build_${suffix}", Exec) {
         group = 'build'
@@ -21,10 +23,11 @@ tasks.register('collectJars', Copy) {
     group = 'build'
     description = 'Copies every built loader jar into the root build/libs folder'
     dependsOn gradle.includedBuilds.collect { it.task(':build') }
-    dependsOn fabricBuilds.collect { "build_${it.replace('.', '_').replace('-', '_')}" }
+    dependsOn standaloneBuilds.collect { "build_${it.replace('.', '_').replace('-', '_')}" }
     loaderBuilds.each { from("${it}/build/libs") }
     include '*-Forge-*.jar', '*-NeoForge-*.jar', '*-Fabric-*.jar'
     into layout.buildDirectory.dir('libs')
+    doFirst { delete layout.buildDirectory.dir('libs') }
 }
 
 tasks.register('cleanRoot', Delete) {
@@ -42,5 +45,5 @@ tasks.register('cleanAll') {
     description = 'Cleans every included build, Fabric build and the root build/libs'
     dependsOn 'cleanRoot'
     dependsOn gradle.includedBuilds.collect { it.task(':clean') }
-    dependsOn fabricBuilds.collect { "clean_${it.replace('.', '_').replace('-', '_')}" }
+    dependsOn((standaloneBuilds + wipBuilds).collect { "clean_${it.replace('.', '_').replace('-', '_')}" })
 }

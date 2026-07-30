@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT">
+            <builds>
+              <build path="$PROJECT_DIR$/1.20.1-forge" name="1.20.1-forge">
+                <projects>
+                  <project path="$PROJECT_DIR$/1.20.1-forge" />
+                </projects>
+              </build>
+              <build path="$PROJECT_DIR$/1.21.1-forge" name="1.21.1-forge">
+                <projects>
+                  <project path="$PROJECT_DIR$/1.21.1-forge" />
+                </projects>
+              </build>
+              <build path="$PROJECT_DIR$/1.21.1-neoforge" name="1.21.1-neoforge">
+                <projects>
+                  <project path="$PROJECT_DIR$/1.21.1-neoforge" />
+                </projects>
+              </build>
+            </builds>
+          </compositeBuild>
+        </compositeConfiguration>
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="#GRADLE_JAVA_HOME" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/1.20.1-forge" />
+            <option value="$PROJECT_DIR$/1.21.1-forge" />
+            <option value="$PROJECT_DIR$/1.21.1-neoforge" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/1.20.1-fabric" />
+        <option name="gradleJvm" value="#GRADLE_JAVA_HOME" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/1.20.1-fabric" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/1.21.1-fabric" />
+        <option name="gradleJvm" value="#GRADLE_JAVA_HOME" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/1.21.1-fabric" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/26.1.2-forge" />
+        <option name="gradleJvm" value="#GRADLE_JAVA_HOME" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/26.1.2-forge" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/26.1.2-neoforge" />
+        <option name="gradleJvm" value="#GRADLE_JAVA_HOME" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/26.1.2-neoforge" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

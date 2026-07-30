@@ -8,7 +8,6 @@
   "key.panoptic.invert_sel": "反选",
   "key.panoptic.clear_sel": "取消选择",
   "key.panoptic.screengrab": "智能截图",
-
   "panoptic.seed.title": "种子检视器",
   "panoptic.seed.help_title": "种子检视器",
   "panoptic.seed.help_sum": "§7你的世界的噪声与结构地图，显示生物群系和结构。",
@@ -75,7 +74,7 @@
   "panoptic.seed.height_y": "Y",
   "panoptic.seed.mode_biome": "生物群系",
   "panoptic.seed.mode_height": "高度",
-
+  "panoptic.seed.loading": "正在加载地图…",
   "panoptic.struct.minecraft.ancient_city": "远古城市",
   "panoptic.struct.minecraft.bastion_remnant": "堡垒遗迹",
   "panoptic.struct.minecraft.buried_treasure": "埋藏的宝藏",
@@ -109,14 +108,12 @@
   "panoptic.struct.minecraft.village_savanna": "热带草原村庄",
   "panoptic.struct.minecraft.village_snowy": "积雪村庄",
   "panoptic.struct.minecraft.village_taiga": "针叶林村庄",
-
   "panoptic.type.block": "方块",
   "panoptic.type.item": "物品",
   "panoptic.type.entity": "实体",
   "panoptic.type.structure": "结构",
   "panoptic.type.biome": "生物群系",
   "panoptic.type.fluid": "流体",
-
   "panoptic.gui.title": "检视器",
   "panoptic.gui.mhelp_title": "检视器",
   "panoptic.gui.mhelp_sum": "§7查看任意方块/物品/实体的内部",
@@ -205,15 +202,12 @@
   "panoptic.gui.prev.no_display": "（隐藏）",
   "panoptic.gui.prev.loading": "正在加载… %s/%s",
   "panoptic.gui.prev.loading_dots": "正在加载…",
-
   "panoptic.msg.captured": "已捕获: %s",
   "panoptic.msg.already": "已捕获过: %s",
-
   "panoptic.value.none": "（无）",
   "panoptic.value.no_properties": "（无属性）",
   "panoptic.value.yes": "是",
   "panoptic.value.no": "否",
-
   "panoptic.field.id": "ID",
   "panoptic.field.translation_key": "翻译键",
   "panoptic.field.mod": "模组",
@@ -277,7 +271,6 @@
   "panoptic.field.max_health": "最大生命值",
   "panoptic.field.move_speed": "移动速度",
   "panoptic.field.follow_range": "追踪范围",
-
   "panoptic.vill.title": "交易检视器",
   "panoptic.vill.back": "返回",
   "panoptic.vill.copy": "复制",
@@ -316,7 +309,6 @@
   "panoptic.vill.copy_all_tip": "将整合包所有村民复制为文本",
   "panoptic.vill.pick_item": "请在左侧选择一个物品",
   "panoptic.vill.goto": "前往村民",
-
   "panoptic.bind.main": "主菜单",
   "panoptic.bind.inspector": "打开检视器",
   "panoptic.bind.villagers": "打开交易检视器",
@@ -336,13 +328,11 @@
   "panoptic.bind.view_draw": "绘制",
   "panoptic.bind.view_reset": "重置视图",
   "panoptic.bind.view_delete": "删除截图",
-
   "panoptic.tool.inspector": "检视器",
   "panoptic.tool.map": "种子检视器",
   "panoptic.tool.villagers": "交易检视器",
   "panoptic.tool.settings": "设置",
   "panoptic.tool.screens": "界面检视器",
-
   "panoptic.main.desc.screens": "你所有智能截图的目录",
   "panoptic.main.title": "Panoptic",
   "panoptic.main.help_title": "Panoptic",
@@ -356,7 +346,6 @@
   "panoptic.main.desc.map": "生物群系与结构地图",
   "panoptic.main.desc.villagers": "游戏中所有可能的村民交易",
   "panoptic.main.desc.settings": "按键与模组选项",
-
   "panoptic.set.draw": "在截图上绘制",
   "panoptic.set.theme": "界面主题",
   "panoptic.set.theme_r": "红 (R)",
@@ -389,7 +378,8 @@
   "panoptic.set.off": "关",
   "panoptic.set.all": "全部",
   "panoptic.set.zero_all": "若想查看完整日志，请输入0",
-
+  "panoptic.set.height_map": "高度图",
+  "panoptic.set.height_map_note": "在种子地图上显示地形起伏。占用较多CPU - 如果地图卡顿请关闭。",
   "panoptic.grab.select": "区域选择",
   "panoptic.grab.world_title": "世界",
   "panoptic.grab.take": "截取",
@@ -402,7 +392,6 @@
   "panoptic.grab.tool_done": "完成",
   "panoptic.grab.tool_cancel": "关闭",
   "panoptic.grab.need_screen": "请先打开一个界面",
-
   "panoptic.screens.blocks": "方块",
   "panoptic.screens.palette": "调色板",
   "panoptic.screens.entities": "实体",
@@ -472,7 +461,6 @@
   "panoptic.screens.given_n": "已给予物品: %s",
   "panoptic.screens.no_rights": "你没有权限",
   "panoptic.screens.inv_full": "物品栏已满",
-
   "panoptic.pause.open": "Panoptic主界面",
   "panoptic.perm.denied": "你没有使用此功能的权限",
   "panoptic.perm.locked": "§c已锁定: 你没有此界面的权限。",
@@ -511,7 +499,6 @@
   "panoptic.adm.help_b4": "如果你的服务器装有LuckPerms，可通过它授予`panoptic.admin`权限，从而让玩家访问此界面。",
   "panoptic.adm.help_b5": "default组默认作用于每名玩家，直到其被分配到其他组。",
   "panoptic.adm.help_b6": "玩家权限有三种状态: 「横线」——从组继承权限；「对勾」——允许；「叉号」——拒绝。",
-
   "panoptic.dash.seed": "种子",
   "panoptic.dash.world": "世界",
   "panoptic.dash.perf": "性能",

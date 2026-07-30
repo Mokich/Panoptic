@@ -8,7 +8,6 @@
   "key.panoptic.invert_sel": "선택 반전",
   "key.panoptic.clear_sel": "선택 해제",
   "key.panoptic.screengrab": "스마트 스크린샷",
-
   "panoptic.seed.title": "시드 검사기",
   "panoptic.seed.help_title": "시드 검사기",
   "panoptic.seed.help_sum": "§7세계의 노이즈 및 구조물 지도로, 생물 군계와 구조물을 표시합니다.",
@@ -71,7 +70,11 @@
   "panoptic.seed.scale.many": "%s블록",
   "panoptic.seed.scale.thousand": "%s천 블록",
   "panoptic.seed.filter_n": "필터:",
-
+  "panoptic.seed.height_surface": "표면",
+  "panoptic.seed.height_y": "Y",
+  "panoptic.seed.mode_biome": "생물군계",
+  "panoptic.seed.mode_height": "높이",
+  "panoptic.seed.loading": "지도 로드 중…",
   "panoptic.struct.minecraft.ancient_city": "고대 도시",
   "panoptic.struct.minecraft.bastion_remnant": "요새 잔해",
   "panoptic.struct.minecraft.buried_treasure": "묻힌 보물",
@@ -105,14 +108,12 @@
   "panoptic.struct.minecraft.village_savanna": "사바나 마을",
   "panoptic.struct.minecraft.village_snowy": "눈 마을",
   "panoptic.struct.minecraft.village_taiga": "타이가 마을",
-
   "panoptic.type.block": "블록",
   "panoptic.type.item": "아이템",
   "panoptic.type.entity": "개체",
   "panoptic.type.structure": "구조물",
   "panoptic.type.biome": "생물 군계",
   "panoptic.type.fluid": "유체",
-
   "panoptic.gui.title": "검사기",
   "panoptic.gui.mhelp_title": "검사기",
   "panoptic.gui.mhelp_sum": "§7모든 블록/아이템/개체의 내부를 확인",
@@ -201,15 +202,12 @@
   "panoptic.gui.prev.no_display": "(숨김)",
   "panoptic.gui.prev.loading": "로드 중… %s/%s",
   "panoptic.gui.prev.loading_dots": "로드 중…",
-
   "panoptic.msg.captured": "포착됨: %s",
   "panoptic.msg.already": "이미 포착됨: %s",
-
   "panoptic.value.none": "(없음)",
   "panoptic.value.no_properties": "(속성 없음)",
   "panoptic.value.yes": "예",
   "panoptic.value.no": "아니요",
-
   "panoptic.field.id": "ID",
   "panoptic.field.translation_key": "번역 키",
   "panoptic.field.mod": "모드",
@@ -273,7 +271,6 @@
   "panoptic.field.max_health": "최대 체력",
   "panoptic.field.move_speed": "이동 속도",
   "panoptic.field.follow_range": "추적 범위",
-
   "panoptic.vill.title": "거래 검사기",
   "panoptic.vill.back": "뒤로",
   "panoptic.vill.copy": "복사",
@@ -312,7 +309,6 @@
   "panoptic.vill.copy_all_tip": "모드팩의 모든 주민을 텍스트로 복사",
   "panoptic.vill.pick_item": "왼쪽에서 아이템을 선택하세요",
   "panoptic.vill.goto": "주민으로 이동",
-
   "panoptic.bind.main": "메인 메뉴",
   "panoptic.bind.inspector": "검사기 열기",
   "panoptic.bind.villagers": "거래 검사기 열기",
@@ -332,13 +328,11 @@
   "panoptic.bind.view_draw": "그리기",
   "panoptic.bind.view_reset": "보기 초기화",
   "panoptic.bind.view_delete": "스크린샷 삭제",
-
   "panoptic.tool.inspector": "검사기",
   "panoptic.tool.map": "시드 검사기",
   "panoptic.tool.villagers": "거래 검사기",
   "panoptic.tool.settings": "설정",
   "panoptic.tool.screens": "화면 검사기",
-
   "panoptic.main.desc.screens": "모든 스마트 스크린샷의 목록",
   "panoptic.main.title": "Panoptic",
   "panoptic.main.help_title": "Panoptic",
@@ -352,7 +346,6 @@
   "panoptic.main.desc.map": "생물 군계 및 구조물 지도",
   "panoptic.main.desc.villagers": "게임 내 가능한 모든 주민 거래",
   "panoptic.main.desc.settings": "조작 및 모드 옵션",
-
   "panoptic.set.draw": "스크린샷에 그리기",
   "panoptic.set.theme": "인터페이스 테마",
   "panoptic.set.theme_r": "빨강 (R)",
@@ -385,7 +378,8 @@
   "panoptic.set.off": "끄기",
   "panoptic.set.all": "전체",
   "panoptic.set.zero_all": "전체 로그를 보려면 0을 입력하세요",
-
+  "panoptic.set.height_map": "높이 지도",
+  "panoptic.set.height_map_note": "시드 지도에 지형의 높낮이를 표시합니다. CPU 부하가 큽니다 - 지도가 느리면 끄세요.",
   "panoptic.grab.select": "영역 선택",
   "panoptic.grab.world_title": "세계",
   "panoptic.grab.take": "촬영",
@@ -398,7 +392,6 @@
   "panoptic.grab.tool_done": "완료",
   "panoptic.grab.tool_cancel": "닫기",
   "panoptic.grab.need_screen": "먼저 인터페이스를 여세요",
-
   "panoptic.screens.blocks": "블록",
   "panoptic.screens.palette": "팔레트",
   "panoptic.screens.entities": "개체",
@@ -468,7 +461,6 @@
   "panoptic.screens.given_n": "지급한 아이템: %s",
   "panoptic.screens.no_rights": "권한이 없습니다",
   "panoptic.screens.inv_full": "인벤토리가 가득 참",
-
   "panoptic.pause.open": "Panoptic 메인 인터페이스",
   "panoptic.perm.denied": "이 기능을 사용할 권한이 없습니다",
   "panoptic.perm.locked": "§c잠김: 이 인터페이스에 대한 권한이 없습니다.",
@@ -494,6 +486,7 @@
   "panoptic.adm.node.inspector": "검사기",
   "panoptic.adm.node.seed.view": "세계 시드",
   "panoptic.adm.node.seed.structures": "지도상의 구조물",
+  "panoptic.adm.node.seed.teleport": "순간이동",
   "panoptic.adm.node.trade": "거래 검사기",
   "panoptic.adm.node.trade.spawn": "주민 소환",
   "panoptic.adm.node.screens": "화면 검사기",
@@ -506,7 +499,6 @@
   "panoptic.adm.help_b4": "서버에 LuckPerms가 있다면 이를 통해 `panoptic.admin` 권한을 부여하여 플레이어가 이 인터페이스에 접근하게 할 수 있습니다.",
   "panoptic.adm.help_b5": "default 그룹은 플레이어가 다른 그룹에 배정될 때까지 모든 플레이어에게 적용됩니다.",
   "panoptic.adm.help_b6": "플레이어 권한에는 세 가지 상태가 있습니다: '대시' — 그룹에서 권한 상속; '체크' — 허용; '엑스' — 거부.",
-
   "panoptic.dash.seed": "시드",
   "panoptic.dash.world": "세계",
   "panoptic.dash.perf": "성능",

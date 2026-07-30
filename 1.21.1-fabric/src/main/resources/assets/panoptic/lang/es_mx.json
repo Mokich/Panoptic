@@ -8,7 +8,6 @@
   "key.panoptic.invert_sel": "Invertir selección",
   "key.panoptic.clear_sel": "Quitar selección",
   "key.panoptic.screengrab": "Captura inteligente",
-
   "panoptic.seed.title": "Inspector de semilla",
   "panoptic.seed.help_title": "Inspector de semilla",
   "panoptic.seed.help_sum": "§7Un mapa de ruido y estructuras de tu mundo, que muestra biomas y estructuras.",
@@ -71,7 +70,11 @@
   "panoptic.seed.scale.many": "%s bloques",
   "panoptic.seed.scale.thousand": "%s mil bloques",
   "panoptic.seed.filter_n": "Filtro:",
-
+  "panoptic.seed.height_surface": "Superficie",
+  "panoptic.seed.height_y": "Y",
+  "panoptic.seed.mode_biome": "Biomas",
+  "panoptic.seed.mode_height": "Altura",
+  "panoptic.seed.loading": "Cargando mapa…",
   "panoptic.struct.minecraft.ancient_city": "Ciudad antigua",
   "panoptic.struct.minecraft.bastion_remnant": "Resto de bastión",
   "panoptic.struct.minecraft.buried_treasure": "Tesoro enterrado",
@@ -106,14 +109,12 @@
   "panoptic.struct.minecraft.village_savanna": "Aldea de sabana",
   "panoptic.struct.minecraft.village_snowy": "Aldea nevada",
   "panoptic.struct.minecraft.village_taiga": "Aldea de taiga",
-
   "panoptic.type.block": "Bloque",
   "panoptic.type.item": "Objeto",
   "panoptic.type.entity": "Entidad",
   "panoptic.type.structure": "Estructura",
   "panoptic.type.biome": "Bioma",
   "panoptic.type.fluid": "Fluido",
-
   "panoptic.gui.title": "Inspector",
   "panoptic.gui.mhelp_title": "Inspector",
   "panoptic.gui.mhelp_sum": "§7Mira dentro de cualquier bloque/objeto/entidad",
@@ -202,15 +203,12 @@
   "panoptic.gui.prev.no_display": "(oculto)",
   "panoptic.gui.prev.loading": "Cargando… %s/%s",
   "panoptic.gui.prev.loading_dots": "Cargando…",
-
   "panoptic.msg.captured": "Capturado: %s",
   "panoptic.msg.already": "Ya capturado: %s",
-
   "panoptic.value.none": "(Ninguno)",
   "panoptic.value.no_properties": "(Sin propiedades)",
   "panoptic.value.yes": "Sí",
   "panoptic.value.no": "No",
-
   "panoptic.field.id": "ID",
   "panoptic.field.translation_key": "Clave de traducción",
   "panoptic.field.mod": "Mod",
@@ -274,7 +272,6 @@
   "panoptic.field.max_health": "Salud máx.",
   "panoptic.field.move_speed": "Velocidad de movimiento",
   "panoptic.field.follow_range": "Rango de seguimiento",
-
   "panoptic.vill.title": "Inspector de intercambios",
   "panoptic.vill.back": "Volver",
   "panoptic.vill.copy": "Copiar",
@@ -313,7 +310,6 @@
   "panoptic.vill.copy_all_tip": "Copiar todos los aldeanos del pack como texto",
   "panoptic.vill.pick_item": "Elige un objeto a la izquierda",
   "panoptic.vill.goto": "Ir al aldeano",
-
   "panoptic.bind.main": "Menú principal",
   "panoptic.bind.inspector": "Abrir Inspector",
   "panoptic.bind.villagers": "Abrir Inspector de intercambios",
@@ -333,13 +329,11 @@
   "panoptic.bind.view_draw": "Dibujar",
   "panoptic.bind.view_reset": "Restablecer vista",
   "panoptic.bind.view_delete": "Eliminar captura",
-
   "panoptic.tool.inspector": "Inspector",
   "panoptic.tool.map": "Inspector de semilla",
   "panoptic.tool.villagers": "Inspector de intercambios",
   "panoptic.tool.settings": "Ajustes",
   "panoptic.tool.screens": "Inspector de pantalla",
-
   "panoptic.main.desc.screens": "Un catálogo de todas tus capturas inteligentes",
   "panoptic.main.title": "Panoptic",
   "panoptic.main.help_title": "Panoptic",
@@ -353,7 +347,6 @@
   "panoptic.main.desc.map": "Mapa de biomas y estructuras",
   "panoptic.main.desc.villagers": "Todos los intercambios de aldeanos posibles del juego",
   "panoptic.main.desc.settings": "Controles y opciones del mod",
-
   "panoptic.set.draw": "Dibujar sobre la captura",
   "panoptic.set.theme": "Tema de la interfaz",
   "panoptic.set.theme_r": "Rojo (R)",
@@ -386,7 +379,8 @@
   "panoptic.set.off": "Desactivado",
   "panoptic.set.all": "Todos",
   "panoptic.set.zero_all": "Escribe 0 si quieres ver los logs completos",
-
+  "panoptic.set.height_map": "Mapa de alturas",
+  "panoptic.set.height_map_note": "Muestra el relieve del terreno en el mapa de la semilla. Carga la CPU - desactívalo si el mapa va lento.",
   "panoptic.grab.select": "Selección de área",
   "panoptic.grab.world_title": "Mundo",
   "panoptic.grab.take": "Capturar",
@@ -399,7 +393,6 @@
   "panoptic.grab.tool_done": "Hecho",
   "panoptic.grab.tool_cancel": "Cerrar",
   "panoptic.grab.need_screen": "Abre primero una interfaz",
-
   "panoptic.screens.blocks": "Bloques",
   "panoptic.screens.palette": "Paleta",
   "panoptic.screens.entities": "Entidades",
@@ -469,7 +462,6 @@
   "panoptic.screens.given_n": "Objetos dados: %s",
   "panoptic.screens.no_rights": "No tienes permiso",
   "panoptic.screens.inv_full": "Inventario lleno",
-
   "panoptic.pause.open": "La interfaz principal de Panoptic",
   "panoptic.perm.denied": "No tienes permiso para usar esta función",
   "panoptic.perm.locked": "§cBloqueado: no tienes permiso para esta interfaz.",
@@ -495,6 +487,7 @@
   "panoptic.adm.node.inspector": "Inspector",
   "panoptic.adm.node.seed.view": "Semilla del mundo",
   "panoptic.adm.node.seed.structures": "Estructuras en el mapa",
+  "panoptic.adm.node.seed.teleport": "Teletransporte",
   "panoptic.adm.node.trade": "Inspector de intercambios",
   "panoptic.adm.node.trade.spawn": "Invocar aldeano",
   "panoptic.adm.node.screens": "Inspector de pantalla",
@@ -507,7 +500,6 @@
   "panoptic.adm.help_b4": "Si tu servidor usa LuckPerms, puedes conceder el permiso `panoptic.admin` a través de él, dando al jugador acceso a esta interfaz.",
   "panoptic.adm.help_b5": "El grupo predeterminado se aplica a cada jugador hasta que se le asigna otro grupo.",
   "panoptic.adm.help_b6": "Cada permiso de jugador tiene tres estados: «Guion» — hereda el permiso del grupo; «Marca» — permitido; «Cruz» — denegado.",
-
   "panoptic.dash.seed": "Semilla",
   "panoptic.dash.world": "Mundo",
   "panoptic.dash.perf": "Rendimiento",

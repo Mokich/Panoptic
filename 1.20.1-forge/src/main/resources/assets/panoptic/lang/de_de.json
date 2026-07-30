@@ -8,7 +8,6 @@
   "key.panoptic.invert_sel": "Auswahl umkehren",
   "key.panoptic.clear_sel": "Auswahl aufheben",
   "key.panoptic.screengrab": "Intelligenter Screenshot",
-
   "panoptic.seed.title": "Seed-Inspektor",
   "panoptic.seed.help_title": "Seed-Inspektor",
   "panoptic.seed.help_sum": "§7Eine Rausch- und Strukturkarte deiner Welt, die Biome und Strukturen anzeigt.",
@@ -75,7 +74,7 @@
   "panoptic.seed.height_y": "Y",
   "panoptic.seed.mode_biome": "Biome",
   "panoptic.seed.mode_height": "Höhe",
-
+  "panoptic.seed.loading": "Karte wird geladen…",
   "panoptic.struct.minecraft.ancient_city": "Antike Stadt",
   "panoptic.struct.minecraft.bastion_remnant": "Bastionsruine",
   "panoptic.struct.minecraft.buried_treasure": "Vergrabener Schatz",
@@ -109,14 +108,12 @@
   "panoptic.struct.minecraft.village_savanna": "Savannendorf",
   "panoptic.struct.minecraft.village_snowy": "Verschneites Dorf",
   "panoptic.struct.minecraft.village_taiga": "Taigadorf",
-
   "panoptic.type.block": "Block",
   "panoptic.type.item": "Gegenstand",
   "panoptic.type.entity": "Entität",
   "panoptic.type.structure": "Struktur",
   "panoptic.type.biome": "Biom",
   "panoptic.type.fluid": "Flüssigkeit",
-
   "panoptic.gui.title": "Inspektor",
   "panoptic.gui.mhelp_title": "Inspektor",
   "panoptic.gui.mhelp_sum": "§7Blick ins Innere jedes Blocks/Gegenstands/jeder Entität",
@@ -205,15 +202,12 @@
   "panoptic.gui.prev.no_display": "(versteckt)",
   "panoptic.gui.prev.loading": "Wird geladen… %s/%s",
   "panoptic.gui.prev.loading_dots": "Wird geladen…",
-
   "panoptic.msg.captured": "Erfasst: %s",
   "panoptic.msg.already": "Bereits erfasst: %s",
-
   "panoptic.value.none": "(Keine)",
   "panoptic.value.no_properties": "(Keine Eigenschaften)",
   "panoptic.value.yes": "Ja",
   "panoptic.value.no": "Nein",
-
   "panoptic.field.id": "ID",
   "panoptic.field.translation_key": "Übersetzungsschlüssel",
   "panoptic.field.mod": "Mod",
@@ -277,7 +271,6 @@
   "panoptic.field.max_health": "Max. Leben",
   "panoptic.field.move_speed": "Bewegungsgeschwindigkeit",
   "panoptic.field.follow_range": "Verfolgungsreichweite",
-
   "panoptic.vill.title": "Handels-Inspektor",
   "panoptic.vill.back": "Zurück",
   "panoptic.vill.copy": "Kopieren",
@@ -316,7 +309,6 @@
   "panoptic.vill.copy_all_tip": "Alle Dorfbewohner des Pakets als Text kopieren",
   "panoptic.vill.pick_item": "Wähle links einen Gegenstand",
   "panoptic.vill.goto": "Zum Dorfbewohner",
-
   "panoptic.bind.main": "Hauptmenü",
   "panoptic.bind.inspector": "Inspektor öffnen",
   "panoptic.bind.villagers": "Handels-Inspektor öffnen",
@@ -336,13 +328,11 @@
   "panoptic.bind.view_draw": "Zeichnen",
   "panoptic.bind.view_reset": "Ansicht zurücksetzen",
   "panoptic.bind.view_delete": "Screenshot löschen",
-
   "panoptic.tool.inspector": "Inspektor",
   "panoptic.tool.map": "Seed-Inspektor",
   "panoptic.tool.villagers": "Handels-Inspektor",
   "panoptic.tool.settings": "Einstellungen",
   "panoptic.tool.screens": "Bildschirm-Inspektor",
-
   "panoptic.main.desc.screens": "Ein Katalog all deiner intelligenten Screenshots",
   "panoptic.main.title": "Panoptic",
   "panoptic.main.help_title": "Panoptic",
@@ -356,7 +346,6 @@
   "panoptic.main.desc.map": "Biom- und Strukturkarte",
   "panoptic.main.desc.villagers": "Alle im Spiel möglichen Dorfbewohner-Handel",
   "panoptic.main.desc.settings": "Tastenbelegungen und Mod-Optionen",
-
   "panoptic.set.draw": "Zeichnen auf Screenshot",
   "panoptic.set.theme": "UI-Design",
   "panoptic.set.theme_r": "Rot (R)",
@@ -389,7 +378,8 @@
   "panoptic.set.off": "Aus",
   "panoptic.set.all": "Alle",
   "panoptic.set.zero_all": "Gib 0 ein, um die vollständigen Logs zu sehen",
-
+  "panoptic.set.height_map": "Höhenkarte",
+  "panoptic.set.height_map_note": "Zeigt das Geländerelief auf der Seed-Karte. Belastet die CPU - abschalten, wenn die Karte ruckelt.",
   "panoptic.grab.select": "Bereichsauswahl",
   "panoptic.grab.world_title": "Welt",
   "panoptic.grab.take": "Aufnehmen",
@@ -402,7 +392,6 @@
   "panoptic.grab.tool_done": "Fertig",
   "panoptic.grab.tool_cancel": "Schließen",
   "panoptic.grab.need_screen": "Öffne zuerst eine Oberfläche",
-
   "panoptic.screens.blocks": "Blöcke",
   "panoptic.screens.palette": "Palette",
   "panoptic.screens.entities": "Entitäten",
@@ -472,7 +461,6 @@
   "panoptic.screens.given_n": "Gegebene Gegenstände: %s",
   "panoptic.screens.no_rights": "Du hast keine Berechtigung",
   "panoptic.screens.inv_full": "Inventar voll",
-
   "panoptic.pause.open": "Die Panoptic-Hauptoberfläche",
   "panoptic.perm.denied": "Du hast keine Berechtigung, diese Funktion zu nutzen",
   "panoptic.perm.locked": "§cGesperrt: Du hast keine Berechtigung für diese Oberfläche.",
@@ -511,7 +499,6 @@
   "panoptic.adm.help_b4": "Nutzt dein Server LuckPerms, kannst du die Berechtigung `panoptic.admin` darüber vergeben, sodass der Spieler Zugriff auf diese Oberfläche erhält.",
   "panoptic.adm.help_b5": "Die Standardgruppe gilt für jeden Spieler, bis er einer anderen Gruppe zugewiesen wird.",
   "panoptic.adm.help_b6": "Jede Spielerberechtigung hat drei Zustände: «Strich» — erbt die Berechtigung von der Gruppe; «Häkchen» — erlaubt; «Kreuz» — verweigert.",
-
   "panoptic.dash.seed": "Seed",
   "panoptic.dash.world": "Welt",
   "panoptic.dash.perf": "Leistung",

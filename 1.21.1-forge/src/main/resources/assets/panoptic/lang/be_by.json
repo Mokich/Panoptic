@@ -8,7 +8,6 @@
   "key.panoptic.invert_sel": "Інвертаваць вылучэнне",
   "key.panoptic.clear_sel": "Зняць вылучэнне",
   "key.panoptic.screengrab": "Разумны здымак",
-
   "panoptic.seed.title": "Сід-інспектар",
   "panoptic.seed.help_title": "Сід-інспектар",
   "panoptic.seed.help_sum": "§7Карта шумаў і структур вашага свету: паказвае біёмы і структуры.",
@@ -71,7 +70,11 @@
   "panoptic.seed.scale.many": "%s блокаў",
   "panoptic.seed.scale.thousand": "%s тыс. блокаў",
   "panoptic.seed.filter_n": "Фільтр:",
-
+  "panoptic.seed.height_surface": "Паверхня",
+  "panoptic.seed.height_y": "Y",
+  "panoptic.seed.mode_biome": "Біёмы",
+  "panoptic.seed.mode_height": "Вышыня",
+  "panoptic.seed.loading": "Загрузка карты…",
   "panoptic.struct.minecraft.ancient_city": "Старажытны горад",
   "panoptic.struct.minecraft.bastion_remnant": "Рэшткі бастыёна",
   "panoptic.struct.minecraft.buried_treasure": "Схаваны скарб",
@@ -106,14 +109,12 @@
   "panoptic.struct.minecraft.village_savanna": "Вёска (савана)",
   "panoptic.struct.minecraft.village_snowy": "Вёска (заснежаная)",
   "panoptic.struct.minecraft.village_taiga": "Вёска (тайга)",
-
   "panoptic.type.block": "Блок",
   "panoptic.type.item": "Прадмет",
   "panoptic.type.entity": "Сутнасць",
   "panoptic.type.structure": "Структура",
   "panoptic.type.biome": "Біём",
   "panoptic.type.fluid": "Вадкасць",
-
   "panoptic.gui.title": "Інспектар",
   "panoptic.gui.mhelp_title": "Інспектар",
   "panoptic.gui.mhelp_sum": "§7Заглядвае ўнутр любога блока/прадмета/сутнасці і г.д.",
@@ -202,15 +203,12 @@
   "panoptic.gui.prev.no_display": "(схаваная)",
   "panoptic.gui.prev.loading": "Загрузка… %s/%s",
   "panoptic.gui.prev.loading_dots": "Загрузка…",
-
   "panoptic.msg.captured": "Занесена: %s",
   "panoptic.msg.already": "Ужо занесена: %s",
-
   "panoptic.value.none": "(Няма)",
   "panoptic.value.no_properties": "(Няма ўласцівасцяў)",
   "panoptic.value.yes": "Так",
   "panoptic.value.no": "Не",
-
   "panoptic.field.id": "ID",
   "panoptic.field.translation_key": "Ключ перакладу",
   "panoptic.field.mod": "Мод",
@@ -274,7 +272,6 @@
   "panoptic.field.max_health": "Здароўе",
   "panoptic.field.move_speed": "Хуткасць руху",
   "panoptic.field.follow_range": "Радыус пераследу",
-
   "panoptic.vill.title": "Гандаль-Інспектар",
   "panoptic.vill.back": "Назад",
   "panoptic.vill.copy": "Капіраваць",
@@ -313,7 +310,6 @@
   "panoptic.vill.copy_all_tip": "Скапіраваць усіх вяскоўцаў зборкі тэкстам",
   "panoptic.vill.pick_item": "Выберыце прадмет злева",
   "panoptic.vill.goto": "Перайсці да вяскоўца",
-
   "panoptic.bind.main": "Галоўнае меню",
   "panoptic.bind.inspector": "Інспектар",
   "panoptic.bind.villagers": "Гандаль-Інспектар",
@@ -333,13 +329,11 @@
   "panoptic.bind.view_draw": "Маляванне",
   "panoptic.bind.view_reset": "Скінуць выгляд",
   "panoptic.bind.view_delete": "Выдаліць здымак",
-
   "panoptic.tool.inspector": "Інспектар",
   "panoptic.tool.map": "Сід-Інспектар",
   "panoptic.tool.villagers": "Гандаль-Інспектар",
   "panoptic.tool.settings": "Налады",
   "panoptic.tool.screens": "Скрын-Інспектар",
-
   "panoptic.main.desc.screens": "Каталог усіх вашых разумных здымкаў",
   "panoptic.main.title": "Panoptic",
   "panoptic.main.help_title": "Panoptic",
@@ -353,7 +347,6 @@
   "panoptic.main.desc.map": "Карта біёмаў і структур",
   "panoptic.main.desc.villagers": "Усе магчымыя ў гульні гандлі вяскоўцаў",
   "panoptic.main.desc.settings": "Кіраванне і параметры мода",
-
   "panoptic.set.draw": "Маляванне на здымку",
   "panoptic.set.theme": "Тэма інтэрфейсаў",
   "panoptic.set.theme_r": "Чырвоны (R)",
@@ -386,7 +379,8 @@
   "panoptic.set.off": "Выкл",
   "panoptic.set.all": "Усе",
   "panoptic.set.zero_all": "Напішыце 0, калі хочаце бачыць поўныя логі",
-
+  "panoptic.set.height_map": "Карта вышынь",
+  "panoptic.set.height_map_note": "Паказвае рэльеф на карце сіду. Нагружае працэсар - выключыце, калі карта тармозіць.",
   "panoptic.grab.select": "Вылучэнне вобласці",
   "panoptic.grab.world_title": "Свет",
   "panoptic.grab.take": "Зняць",
@@ -399,7 +393,6 @@
   "panoptic.grab.tool_done": "Гатова",
   "panoptic.grab.tool_cancel": "Закрыць",
   "panoptic.grab.need_screen": "Адкрыйце які-небудзь інтэрфейс",
-
   "panoptic.screens.blocks": "Блокаў",
   "panoptic.screens.palette": "Палітра",
   "panoptic.screens.entities": "Сутнасцяў",
@@ -469,7 +462,6 @@
   "panoptic.screens.given_n": "Выдана прадметаў: %s",
   "panoptic.screens.no_rights": "У вас няма правоў",
   "panoptic.screens.inv_full": "Інвентар поўны",
-
   "panoptic.pause.open": "Галоўны інтэрфейс Panoptic",
   "panoptic.perm.denied": "У вас няма права на выкарыстанне гэтай функцыі",
   "panoptic.perm.locked": "§cНедаступна: у вас няма права на гэты інтэрфейс.",
@@ -495,6 +487,7 @@
   "panoptic.adm.node.inspector": "Інспектар",
   "panoptic.adm.node.seed.view": "Сід свету",
   "panoptic.adm.node.seed.structures": "Структуры на карце",
+  "panoptic.adm.node.seed.teleport": "Тэлепарт",
   "panoptic.adm.node.trade": "Гандаль-Інспектар",
   "panoptic.adm.node.trade.spawn": "Спаўн вяскоўца",
   "panoptic.adm.node.screens": "Скрын-Інспектар",
@@ -507,7 +500,6 @@
   "panoptic.adm.help_b4": "Калі на серверы стаіць LuckPerms, права `panoptic.admin` можна выдаць праз яго, тады гулец атрымае доступ да гэтага інтэрфейсу.",
   "panoptic.adm.help_b5": "Група default дзейнічае на ўсіх гульцоў па змаўчанні, пакуль ім не прызначана свая група.",
   "panoptic.adm.help_b6": "У права гульца тры становішчы: «Прочырк» — успадкоўвае права ад групы; «Галачка» — Дазволена; «Крыжык» — Забаронена.",
-
   "panoptic.dash.seed": "Сід",
   "panoptic.dash.world": "Свет",
   "panoptic.dash.perf": "Прадукцыйнасць",

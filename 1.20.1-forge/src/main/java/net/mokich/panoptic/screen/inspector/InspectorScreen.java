@@ -191,6 +191,19 @@ public final class InspectorScreen extends Screen implements TextTyping {
     private final Map<String, int[]> texDims = new HashMap<>();
     private final Map<String, List<String>> previewCache = new HashMap<>();
     private final Map<String, StructPreview> structCache = new HashMap<>();
+    private float structYaw;
+    private float structPitch = 30.0F;
+    private boolean structRotating;
+    private double structPrevX;
+    private double structPrevY;
+    private double structRawX;
+    private double structRawY;
+    private boolean structLockInit;
+    private FRow structPinRow;
+    private int structPinX;
+    private int structPinY;
+    private long structSeenAt;
+    private long structSpinAt;
     private static final ExecutorService STRUCT_LOADER =
             Executors.newSingleThreadExecutor(r -> {
                 Thread t = new Thread(r, "gmt-struct-loader");
@@ -1421,6 +1434,22 @@ public final class InspectorScreen extends Screen implements TextTyping {
         if (System.currentTimeMillis() - lastFilesListScroll < 350) {
             preview = null;
         }
+        boolean alt = isAltDown();
+        if (alt && !structRotating && preview != null
+                && System.currentTimeMillis() - structSeenAt < 250L) {
+            structRotating = true;
+            structPinRow = preview;
+            structPinX = mouseX;
+            structPinY = mouseY;
+        } else if (!alt && structRotating) {
+            structRotating = false;
+            structPinRow = null;
+        }
+        if (structRotating && structPinRow != null) {
+            preview = structPinRow;
+            mouseX = structPinX;
+            mouseY = structPinY;
+        }
         if (preview != previewRow) {
             boolean wasNull = previewRow == null;
             previewRow = preview;
@@ -2387,6 +2416,12 @@ public final class InspectorScreen extends Screen implements TextTyping {
         return Math.max(0, lines.size() - PREVIEW_LINES);
     }
 
+    private static boolean isAltDown() {
+        long w = Minecraft.getInstance().getWindow().getWindow();
+        return InputConstants.isKeyDown(w, GLFW.GLFW_KEY_LEFT_ALT)
+                || InputConstants.isKeyDown(w, GLFW.GLFW_KEY_RIGHT_ALT);
+    }
+
     private static boolean isTabDown() {
         return InputConstants.isKeyDown(
                 Minecraft.getInstance().getWindow().getWindow(),
@@ -2424,13 +2459,21 @@ public final class InspectorScreen extends Screen implements TextTyping {
     private void drawStructure3D(GuiGraphics g, StructPreview sp, int count, int cx, int cy, int box) {
         int maxDim = Math.max(1, Math.max(sp.sx, Math.max(sp.sy, sp.sz)));
         float scale = box * 0.58F / maxDim;
-        float spin = (System.currentTimeMillis() % 11000L) / 11000.0F * 360.0F;
+        long now = System.currentTimeMillis();
+        structSeenAt = now;
+        if (!structRotating) {
+            if (structSpinAt != 0L && now > structSpinAt) {
+                structYaw += (now - structSpinAt) / 11000.0F * 360.0F;
+            }
+        }
+        structSpinAt = now;
+        float spin = structYaw;
 
         PoseStack pose = g.pose();
         pose.pushPose();
         pose.translate(cx, cy, 180.0F);
         pose.scale(scale, -scale, scale);
-        pose.mulPose(Axis.XP.rotationDegrees(30.0F));
+        pose.mulPose(Axis.XP.rotationDegrees(structPitch));
         pose.mulPose(Axis.YP.rotationDegrees(spin));
         pose.translate(-sp.sx / 2.0F, -sp.sy / 2.0F, -sp.sz / 2.0F);
 
@@ -3397,6 +3440,30 @@ public final class InspectorScreen extends Screen implements TextTyping {
             marked.add(list.get(i));
         }
         lastMarkIndex = b;
+    }
+
+    @Override
+    public void mouseMoved(double mouseX, double mouseY) {
+        if (structRotating && this.minecraft != null) {
+            if (!structLockInit) {
+                structLockInit = true;
+                int sw = this.minecraft.getWindow().getScreenWidth();
+                int sh = this.minecraft.getWindow().getScreenHeight();
+                structRawX = Math.round(mouseX * sw / this.width);
+                structRawY = Math.round(mouseY * sh / this.height);
+                structPrevX = structRawX * this.width / sw;
+                structPrevY = structRawY * this.height / sh;
+                return;
+            }
+            structYaw += (float) (mouseX - structPrevX) * 1.2F;
+            structPitch = Mth.clamp(structPitch + (float) (mouseY - structPrevY) * 1.2F, -89.0F, 89.0F);
+            GLFW.glfwSetCursorPos(this.minecraft.getWindow().getWindow(), structRawX, structRawY);
+            return;
+        }
+        structLockInit = false;
+        structPrevX = mouseX;
+        structPrevY = mouseY;
+        super.mouseMoved(mouseX, mouseY);
     }
 
     private void handleFilesKey(int keyCode, int scanCode) {

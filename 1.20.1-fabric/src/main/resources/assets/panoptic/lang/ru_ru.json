@@ -479,6 +479,7 @@
   "panoptic.adm.node.inspector": "Инспектор",
   "panoptic.adm.node.seed.view": "Сид мира",
   "panoptic.adm.node.seed.structures": "Структуры на карте",
+  "panoptic.adm.node.seed.teleport": "Телепорт",
   "panoptic.adm.node.trade": "Торг-Инспектор",
   "panoptic.adm.node.trade.spawn": "Спавн жителя",
   "panoptic.adm.node.screens": "Скрин-Инспектор",

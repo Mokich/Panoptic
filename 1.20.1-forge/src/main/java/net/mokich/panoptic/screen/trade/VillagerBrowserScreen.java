@@ -232,18 +232,31 @@ public class VillagerBrowserScreen extends Screen implements TextTyping {
         Map<String, ItemEntry> map = new LinkedHashMap<>();
         for (Prof p : all) {
             for (TradeRow t : p.trades()) {
-                if (t.variants == null) {
-                    indexRow(map, p, t);
-                } else {
-                    for (TradeRow v : t.variants) {
-                        indexRow(map, p, v);
-                    }
-                }
+                indexDeep(map, p, t);
             }
         }
         List<ItemEntry> list = new ArrayList<>(map.values());
         list.sort((a, b) -> a.name().compareToIgnoreCase(b.name()));
         allItems = list;
+    }
+
+    private void indexDeep(Map<String, ItemEntry> map, Prof p, TradeRow t) {
+        boolean leaf = true;
+        if (t.variants != null) {
+            leaf = false;
+            for (TradeRow v : t.variants) {
+                indexDeep(map, p, v);
+            }
+        }
+        if (t.rawVariants != null) {
+            leaf = false;
+            for (TradeRow v : t.rawVariants) {
+                indexRow(map, p, v);
+            }
+        }
+        if (leaf) {
+            indexRow(map, p, t);
+        }
     }
 
     private void indexRow(Map<String, ItemEntry> map, Prof p, TradeRow t) {
@@ -697,10 +710,7 @@ public class VillagerBrowserScreen extends Screen implements TextTyping {
                 lastLevel = t.level;
                 content += HEADER_H;
             }
-            content += TRADE_H;
-            if (t.variants != null && expanded.contains(t)) {
-                content += t.variants.size() * TRADE_H;
-            }
+            content += treeHeight(t);
         }
         return content;
     }
@@ -808,20 +818,7 @@ public class VillagerBrowserScreen extends Screen implements TextTyping {
                 }
                 y += HEADER_H;
             }
-            if (y + TRADE_H >= viewY1 && y <= botY) {
-                drawTrade(g, t, rightX1 + 8, y, mouseX, mouseY, viewY1, true);
-            }
-            refZones.add(new Object[]{y, t, null});
-            y += TRADE_H;
-            if (t.variants != null && expanded.contains(t)) {
-                for (TradeRow v : t.variants) {
-                    if (y + TRADE_H >= viewY1 && y <= botY) {
-                        drawTrade(g, v, rightX1 + 24, y, mouseX, mouseY, viewY1, false);
-                        g.fill(rightX1 + 14, y + 2, rightX1 + 16, y + TRADE_H - 4, GuiStyle.BORDER_B);
-                    }
-                    y += TRADE_H;
-                }
-            }
+            y = drawTradeTree(g, t, 0, y, mouseX, mouseY, viewY1, botY);
         }
         g.disableScissor();
         Scroll.bar(g, rightX2 - 6, viewY1, botY - 1, rc, scrollR, dragR, mouseX, mouseY);
@@ -869,6 +866,38 @@ public class VillagerBrowserScreen extends Screen implements TextTyping {
         return I18n.get("panoptic.vill.level", level) + (base.isEmpty() ? "" : " — " + base);
     }
 
+    private int drawTradeTree(GuiGraphics g, TradeRow t, int depth, int y,
+                              int mouseX, int mouseY, int viewY1, int botY) {
+        int px = rightX1 + 8 + depth * 16;
+        if (y + TRADE_H >= viewY1 && y <= botY) {
+            drawTrade(g, t, px, y, mouseX, mouseY, viewY1, true);
+            if (depth > 0) {
+                int gx = rightX1 + 6 + depth * 16;
+                g.fill(gx, y + 2, gx + 2, y + TRADE_H - 4, GuiStyle.BORDER_B);
+            }
+        }
+        refZones.add(new Object[]{y, t, null});
+        y += TRADE_H;
+        List<TradeRow> ch = t.children();
+        if (ch != null && expanded.contains(t)) {
+            for (TradeRow v : ch) {
+                y = drawTradeTree(g, v, depth + 1, y, mouseX, mouseY, viewY1, botY);
+            }
+        }
+        return y;
+    }
+
+    private int treeHeight(TradeRow t) {
+        int h = TRADE_H;
+        List<TradeRow> ch = t.children();
+        if (ch != null && expanded.contains(t)) {
+            for (TradeRow v : ch) {
+                h += treeHeight(v);
+            }
+        }
+        return h;
+    }
+
     private void drawTrade(GuiGraphics g, TradeRow t, int px, int y, int mouseX, int mouseY,
                            int viewY1, boolean interactive) {
         boolean hl = rowMatchesQuery(t);
@@ -901,10 +930,10 @@ public class VillagerBrowserScreen extends Screen implements TextTyping {
         if (t.sourceMod != null) {
             info.append("§6").append(t.sourceMod).append("§r · ");
         }
-        if (t.variants != null && interactive) {
-            info.append(I18n.get("panoptic.vill.variants", t.variants.size())).append("  ");
+        if (t.children() != null && interactive) {
+            info.append(I18n.get("panoptic.vill.variants", t.children().size())).append("  ");
         } else {
-            if (t.random && t.variants == null) {
+            if (t.random && t.children() == null) {
                 info.append(I18n.get("panoptic.vill.random")).append(" · ");
             }
             info.append(I18n.get("panoptic.vill.uses", t.maxUses)).append(" · ").append(t.xp).append(" XP");
@@ -922,11 +951,11 @@ public class VillagerBrowserScreen extends Screen implements TextTyping {
             }
         }
         if (infoX > px + 4) {
-            boolean varHov = t.variants != null && interactive && inView
+            boolean varHov = t.children() != null && interactive && inView
                     && mouseX >= infoX && mouseX <= rightX2 - 8 && mouseY >= y && mouseY < y + TRADE_H;
-            int ic = t.variants != null && interactive ? (varHov ? GuiStyle.ACCENT : GuiStyle.MUTED) : GuiStyle.DIM;
+            int ic = t.children() != null && interactive ? (varHov ? GuiStyle.ACCENT : GuiStyle.MUTED) : GuiStyle.DIM;
             g.drawString(this.font, infoS, infoX, y + 8, ic);
-            if (t.variants != null && interactive) {
+            if (t.children() != null && interactive) {
                 if (expanded.contains(t)) {
                     Icons.iconTriDown(g, rightX2 - 14, y + 10, ic);
                 } else {
@@ -934,7 +963,7 @@ public class VillagerBrowserScreen extends Screen implements TextTyping {
                 }
             }
         }
-        if (t.sourceMod != null && t.variants != null && interactive && inView
+        if (t.sourceMod != null && t.children() != null && interactive && inView
                 && mouseX >= px && mouseX < infoX && mouseY >= y && mouseY < y + TRADE_H && hoverTip == null) {
             hoverTip = I18n.get("panoptic.vill.from", t.sourceMod);
         }
@@ -1121,7 +1150,7 @@ public class VillagerBrowserScreen extends Screen implements TextTyping {
             sb.append(" | ").append(t.note.replace("§8", "").replace("§7", ""));
         }
         if (t.variants != null) {
-            sb.append(" | ").append(I18n.get("panoptic.vill.variants", t.variants.size()));
+            sb.append(" | ").append(I18n.get("panoptic.vill.variants", t.children().size()));
         }
         if (t.sourceMod != null) {
             sb.append(" | ").append(I18n.get("panoptic.vill.from", t.sourceMod));
@@ -1281,10 +1310,10 @@ public class VillagerBrowserScreen extends Screen implements TextTyping {
                         targetR = 0;
                         scrollR = 0;
                         rebuildRows();
-                        if (t.variants != null) {
+                        if (t.children() != null) {
                             expanded.add(t);
                         }
-                    } else if (t.variants != null) {
+                    } else if (t.children() != null) {
                         sound(0.9F);
                         if (!expanded.remove(t)) {
                             expanded.add(t);

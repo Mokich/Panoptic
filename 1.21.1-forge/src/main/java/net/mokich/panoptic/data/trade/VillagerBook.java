@@ -49,6 +49,7 @@ public final class VillagerBook {
         public final String note;
         public final String sourceMod;
         public final List<TradeRow> variants;
+        public transient List<TradeRow> rawVariants;
         public transient VillagerTrades.ItemListing listing;
         public transient boolean serverPending;
 
@@ -68,6 +69,16 @@ public final class VillagerBook {
 
         public boolean sellsToPlayer() {
             return !result.is(Items.EMERALD);
+        }
+
+        public List<TradeRow> children() {
+            if (variants != null && !variants.isEmpty()) {
+                return variants;
+            }
+            if (rawVariants != null && rawVariants.size() > 1) {
+                return rawVariants;
+            }
+            return null;
         }
     }
 
@@ -136,14 +147,23 @@ public final class VillagerBook {
                 .append(id).append(' ')
                 .append(mod.toLowerCase(Locale.ROOT)).append(' ');
         for (TradeRow t : trades) {
-            appendRow(blob, t);
-            if (t.variants != null) {
-                for (TradeRow v : t.variants) {
-                    appendRow(blob, v);
-                }
-            }
+            appendDeep(blob, t);
         }
         return new Prof(id, name, mod, wandering, prof, stations, trades, blob.toString());
+    }
+
+    private static void appendDeep(StringBuilder blob, TradeRow t) {
+        appendRow(blob, t);
+        if (t.variants != null) {
+            for (TradeRow v : t.variants) {
+                appendDeep(blob, v);
+            }
+        }
+        if (t.rawVariants != null) {
+            for (TradeRow v : t.rawVariants) {
+                appendRow(blob, v);
+            }
+        }
     }
 
     private static void appendRow(StringBuilder blob, TradeRow t) {
@@ -164,6 +184,12 @@ public final class VillagerBook {
             blob.append(key).append(' ');
         }
         blob.append(stack.getHoverName().getString().toLowerCase(Locale.ROOT)).append(' ');
+        ItemEnchantments ench = EnchantmentHelper.getEnchantmentsForCrafting(stack);
+        for (Holder<Enchantment> e : ench.keySet()) {
+            blob.append(e.value().description().getString().toLowerCase(Locale.ROOT)).append(' ');
+            blob.append(e.unwrapKey().map(k -> k.location().toString()).orElse("")).append(' ');
+            blob.append(lvlText(ench.getLevel(e)).toLowerCase(Locale.ROOT)).append(' ');
+        }
     }
 
     private static TradeRow sample(VillagerTrades.ItemListing listing, int level, LivingEntity dummy,
@@ -320,29 +346,26 @@ public final class VillagerBook {
         for (TradeRow t : raw) {
             groups.computeIfAbsent(groupKey(t), k -> new ArrayList<>()).add(t);
         }
-        if (groups.size() == raw.size()) {
-            return raw;
-        }
         List<TradeRow> out = new ArrayList<>();
         for (List<TradeRow> gr : groups.values()) {
-            out.add(gr.size() == 1 ? gr.get(0) : mergeGroup(gr));
+            out.add(mergeGroup(gr));
         }
         return out;
     }
 
     private static String groupKey(TradeRow t) {
         ItemEnchantments ench = EnchantmentHelper.getEnchantmentsForCrafting(t.result);
-        if (ench.isEmpty()) {
-            return "u|" + System.identityHashCode(t);
-        }
         StringBuilder sb = new StringBuilder();
         sb.append(ForgeRegistries.ITEMS.getKey(t.result.getItem()));
-        List<String> enchIds = new ArrayList<>();
-        for (Holder<Enchantment> e : ench.keySet()) {
-            enchIds.add(e.unwrapKey().map(k -> k.location().toString()).orElse("?"));
+        if (ench.isEmpty()) {
+            return "u|" + sb + "|" + System.identityHashCode(t);
         }
-        Collections.sort(enchIds);
-        sb.append('|').append(enchIds);
+        if (ench.size() == 1) {
+            Holder<Enchantment> e = ench.keySet().iterator().next();
+            sb.append('|').append(e.unwrapKey().map(k -> k.location().toString()).orElse("?"));
+        } else {
+            sb.append("|*");
+        }
         sb.append('|').append(ForgeRegistries.ITEMS.getKey(t.costA.getItem()));
         sb.append('|').append(ForgeRegistries.ITEMS.getKey(t.costB.getItem()));
         return sb.toString();
@@ -350,47 +373,67 @@ public final class VillagerBook {
 
     private static TradeRow mergeGroup(List<TradeRow> gr) {
         TradeRow best = gr.get(0);
-        int bestLvl = -1;
+        int bestScore = -1;
         int minC = Integer.MAX_VALUE;
         int maxC = 0;
-        int minL = Integer.MAX_VALUE;
-        int maxL = 0;
-        Holder<Enchantment> single = null;
-        boolean sameSingle = true;
+        Map<Holder<Enchantment>, int[]> levels = new LinkedHashMap<>();
+        Set<Holder<Enchantment>> firstSet = null;
+        boolean sameSet = true;
         for (TradeRow t : gr) {
             minC = Math.min(minC, t.costA.getCount());
             maxC = Math.max(maxC, t.costA.getCount());
             ItemEnchantments em = EnchantmentHelper.getEnchantmentsForCrafting(t.result);
-            if (em.size() == 1) {
-                var en = em.entrySet().iterator().next();
-                if (single == null) {
-                    single = en.getKey();
-                } else if (!single.equals(en.getKey())) {
-                    sameSingle = false;
+            Set<Holder<Enchantment>> keys = new LinkedHashSet<>(em.keySet());
+            if (firstSet == null) {
+                firstSet = keys;
+            } else if (!firstSet.equals(keys)) {
+                sameSet = false;
+            }
+            int score = 0;
+            for (Holder<Enchantment> e : keys) {
+                int lv = em.getLevel(e);
+                score += lv;
+                int[] mm = levels.get(e);
+                if (mm == null) {
+                    levels.put(e, new int[]{lv, lv});
+                } else {
+                    mm[0] = Math.min(mm[0], lv);
+                    mm[1] = Math.max(mm[1], lv);
                 }
-                minL = Math.min(minL, en.getIntValue());
-                maxL = Math.max(maxL, en.getIntValue());
-                if (en.getIntValue() > bestLvl) {
-                    bestLvl = en.getIntValue();
-                    best = t;
-                }
-            } else {
-                sameSingle = false;
+            }
+            if (score > bestScore) {
+                bestScore = score;
+                best = t;
             }
         }
-        String price = minC == maxC ? String.valueOf(minC) : minC + "–" + maxC;
-        String note;
-        if (sameSingle && single != null) {
-            note = single.value().description().getString()
-                    + (maxL > minL ? " " + lvlText(minL) + "–" + lvlText(maxL) : "")
-                    + " §8· §7" + price;
-        } else {
+        String price = minC == maxC ? String.valueOf(minC) : minC + "-" + maxC;
+        String note = null;
+        if (!levels.isEmpty() && sameSet) {
+            StringBuilder sb = new StringBuilder();
+            for (Map.Entry<Holder<Enchantment>, int[]> e : levels.entrySet()) {
+                if (sb.length() > 0) {
+                    sb.append(", ");
+                }
+                sb.append(enchLabel(e.getKey(), e.getValue()[0], e.getValue()[1]));
+            }
+            note = sb + " §8· §7" + price;
+        } else if (gr.size() > 1) {
             note = I18n.get("panoptic.vill.variants", gr.size()) + " §8· §7" + price;
         }
         ItemStack cost = best.costA.copy();
         cost.setCount(minC);
-        return new TradeRow(best.level, cost, best.costB, best.result,
-                best.maxUses, best.xp, false, note, best.sourceMod, null);
+        TradeRow row = new TradeRow(best.level, cost, best.costB, best.result,
+                best.maxUses, best.xp, gr.size() > 1, note, best.sourceMod, null);
+        row.rawVariants = gr;
+        return row;
+    }
+
+    private static String enchLabel(Holder<Enchantment> e, int lo, int hi) {
+        String name = e.value().description().getString();
+        if (e.value().getMaxLevel() <= 1) {
+            return name;
+        }
+        return name + " " + (lo == hi ? lvlText(lo) : lvlText(lo) + "-" + lvlText(hi));
     }
 
     public static void spawnWithTrades(Prof prof) {
@@ -478,22 +521,28 @@ public final class VillagerBook {
                     continue;
                 }
                 Enchantment ench = holder.value();
+                boolean treasure = holder.is(EnchantmentTags.TREASURE);
                 int minL = ench.getMinLevel();
                 int maxL = ench.getMaxLevel();
-                int minCost = 2 + 3 * minL;
-                int maxCost = 2 + (5 + maxL * 10 - 1) + 3 * maxL;
-                if (holder.is(EnchantmentTags.TREASURE)) {
-                    minCost *= 2;
-                    maxCost *= 2;
+                String name = ench.description().getString();
+                List<TradeRow> levels = new ArrayList<>();
+                for (int l = minL; l <= maxL; l++) {
+                    int lo = bookCost(l, treasure, false);
+                    int hi = bookCost(l, treasure, true);
+                    String ln = name + (maxL > 1 ? " " + lvlText(l) : "") + " §8· §7" + lo + "-" + hi;
+                    levels.add(new TradeRow(level, new ItemStack(Items.EMERALD, lo), new ItemStack(Items.BOOK),
+                            EnchantedBookItem.createForEnchantment(new EnchantmentInstance(holder, l)),
+                            12, 2 + level * 5, false, ln, source, null));
                 }
-                minCost = Math.min(64, minCost);
-                maxCost = Math.min(64, maxCost);
+                int minCost = bookCost(minL, treasure, false);
+                int maxCost = bookCost(maxL, treasure, true);
                 ItemStack book = EnchantedBookItem.createForEnchantment(new EnchantmentInstance(holder, maxL));
-                String note = ench.description().getString()
-                        + (maxL > 1 ? " " + lvlText(minL) + "–" + lvlText(maxL) : "")
-                        + " §8· §7" + minCost + "–" + maxCost;
+                String note = name
+                        + (maxL > 1 ? " " + lvlText(minL) + "-" + lvlText(maxL) : "")
+                        + " §8· §7" + minCost + "-" + maxCost;
                 variants.add(new TradeRow(level, new ItemStack(Items.EMERALD, minCost), new ItemStack(Items.BOOK),
-                        book, 12, 2 + level * 5, false, note, source, null));
+                        book, 12, 2 + level * 5, false, note, source,
+                        levels.size() > 1 ? levels : null));
             }
             if (variants.isEmpty()) {
                 return null;
@@ -504,6 +553,14 @@ public final class VillagerBook {
         } catch (Throwable ignored) {
             return null;
         }
+    }
+
+    private static int bookCost(int lvl, boolean treasure, boolean upper) {
+        int c = upper ? 6 + 13 * lvl : 2 + 3 * lvl;
+        if (treasure) {
+            c *= 2;
+        }
+        return Math.min(64, c);
     }
 
     private static String lvlText(int lvl) {

@@ -71,6 +71,8 @@ minecraft {
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
+sourceSets.main.output.resourcesDir = layout.buildDirectory.dir('classes/java/main').get().asFile
+
 repositories {
     maven { url "https://maven.blamejared.com" }
 }

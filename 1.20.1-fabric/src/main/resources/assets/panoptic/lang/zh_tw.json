@@ -8,7 +8,6 @@
   "key.panoptic.invert_sel": "反向選取",
   "key.panoptic.clear_sel": "取消選取",
   "key.panoptic.screengrab": "智慧型截圖",
-
   "panoptic.seed.title": "種子檢視器",
   "panoptic.seed.help_title": "種子檢視器",
   "panoptic.seed.help_sum": "§7你的世界的雜訊與結構地圖，顯示生態域和結構。",
@@ -71,7 +70,11 @@
   "panoptic.seed.scale.many": "%s格",
   "panoptic.seed.scale.thousand": "%s千格",
   "panoptic.seed.filter_n": "篩選器:",
-
+  "panoptic.seed.height_surface": "地表",
+  "panoptic.seed.height_y": "Y",
+  "panoptic.seed.mode_biome": "生物群系",
+  "panoptic.seed.mode_height": "高度",
+  "panoptic.seed.loading": "正在載入地圖…",
   "panoptic.struct.minecraft.ancient_city": "遠古城市",
   "panoptic.struct.minecraft.bastion_remnant": "堡壘遺跡",
   "panoptic.struct.minecraft.buried_treasure": "埋藏的寶藏",
@@ -105,14 +108,12 @@
   "panoptic.struct.minecraft.village_savanna": "莽原村莊",
   "panoptic.struct.minecraft.village_snowy": "積雪村莊",
   "panoptic.struct.minecraft.village_taiga": "針葉林村莊",
-
   "panoptic.type.block": "方塊",
   "panoptic.type.item": "物品",
   "panoptic.type.entity": "實體",
   "panoptic.type.structure": "結構",
   "panoptic.type.biome": "生態域",
   "panoptic.type.fluid": "流體",
-
   "panoptic.gui.title": "檢視器",
   "panoptic.gui.mhelp_title": "檢視器",
   "panoptic.gui.mhelp_sum": "§7查看任意方塊/物品/實體的內部",
@@ -201,15 +202,12 @@
   "panoptic.gui.prev.no_display": "（隱藏）",
   "panoptic.gui.prev.loading": "正在載入… %s/%s",
   "panoptic.gui.prev.loading_dots": "正在載入…",
-
   "panoptic.msg.captured": "已捕捉: %s",
   "panoptic.msg.already": "已捕捉過: %s",
-
   "panoptic.value.none": "（無）",
   "panoptic.value.no_properties": "（無屬性）",
   "panoptic.value.yes": "是",
   "panoptic.value.no": "否",
-
   "panoptic.field.id": "ID",
   "panoptic.field.translation_key": "翻譯鍵",
   "panoptic.field.mod": "模組",
@@ -273,7 +271,6 @@
   "panoptic.field.max_health": "最大生命值",
   "panoptic.field.move_speed": "移動速度",
   "panoptic.field.follow_range": "追蹤範圍",
-
   "panoptic.vill.title": "交易檢視器",
   "panoptic.vill.back": "返回",
   "panoptic.vill.copy": "複製",
@@ -312,7 +309,6 @@
   "panoptic.vill.copy_all_tip": "將模組包所有村民複製為文字",
   "panoptic.vill.pick_item": "請在左側選擇一個物品",
   "panoptic.vill.goto": "前往村民",
-
   "panoptic.bind.main": "主選單",
   "panoptic.bind.inspector": "開啟檢視器",
   "panoptic.bind.villagers": "開啟交易檢視器",
@@ -332,13 +328,11 @@
   "panoptic.bind.view_draw": "繪製",
   "panoptic.bind.view_reset": "重設檢視",
   "panoptic.bind.view_delete": "刪除截圖",
-
   "panoptic.tool.inspector": "檢視器",
   "panoptic.tool.map": "種子檢視器",
   "panoptic.tool.villagers": "交易檢視器",
   "panoptic.tool.settings": "設定",
   "panoptic.tool.screens": "介面檢視器",
-
   "panoptic.main.desc.screens": "你所有智慧型截圖的目錄",
   "panoptic.main.title": "Panoptic",
   "panoptic.main.help_title": "Panoptic",
@@ -352,7 +346,6 @@
   "panoptic.main.desc.map": "生態域與結構地圖",
   "panoptic.main.desc.villagers": "遊戲中所有可能的村民交易",
   "panoptic.main.desc.settings": "按鍵與模組選項",
-
   "panoptic.set.draw": "在截圖上繪製",
   "panoptic.set.theme": "介面主題",
   "panoptic.set.theme_r": "紅 (R)",
@@ -385,7 +378,8 @@
   "panoptic.set.off": "關",
   "panoptic.set.all": "全部",
   "panoptic.set.zero_all": "若想查看完整日誌，請輸入0",
-
+  "panoptic.set.height_map": "高度圖",
+  "panoptic.set.height_map_note": "在種子地圖上顯示地形起伏。佔用較多CPU - 如果地圖卡頓請關閉。",
   "panoptic.grab.select": "區域選取",
   "panoptic.grab.world_title": "世界",
   "panoptic.grab.take": "擷取",
@@ -398,7 +392,6 @@
   "panoptic.grab.tool_done": "完成",
   "panoptic.grab.tool_cancel": "關閉",
   "panoptic.grab.need_screen": "請先開啟一個介面",
-
   "panoptic.screens.blocks": "方塊",
   "panoptic.screens.palette": "調色盤",
   "panoptic.screens.entities": "實體",
@@ -468,7 +461,6 @@
   "panoptic.screens.given_n": "已給予物品: %s",
   "panoptic.screens.no_rights": "你沒有權限",
   "panoptic.screens.inv_full": "物品欄已滿",
-
   "panoptic.pause.open": "Panoptic主介面",
   "panoptic.perm.denied": "你沒有使用此功能的權限",
   "panoptic.perm.locked": "§c已鎖定: 你沒有此介面的權限。",
@@ -494,6 +486,7 @@
   "panoptic.adm.node.inspector": "檢視器",
   "panoptic.adm.node.seed.view": "世界種子",
   "panoptic.adm.node.seed.structures": "地圖上的結構",
+  "panoptic.adm.node.seed.teleport": "傳送",
   "panoptic.adm.node.trade": "交易檢視器",
   "panoptic.adm.node.trade.spawn": "生成村民",
   "panoptic.adm.node.screens": "介面檢視器",
@@ -506,7 +499,6 @@
   "panoptic.adm.help_b4": "如果你的伺服器裝有LuckPerms，可透過它授予`panoptic.admin`權限，從而讓玩家存取此介面。",
   "panoptic.adm.help_b5": "default群組預設作用於每名玩家，直到其被指派到其他群組。",
   "panoptic.adm.help_b6": "玩家權限有三種狀態: 「橫線」——從群組繼承權限；「勾選」——允許；「叉號」——拒絕。",
-
   "panoptic.dash.seed": "種子",
   "panoptic.dash.world": "世界",
   "panoptic.dash.perf": "效能",

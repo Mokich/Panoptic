@@ -21,7 +21,9 @@ mcmodsrepo/
 libs/
 
 # IDE
-.idea/
+/.idea/*
+!/.idea/gradle.xml
+*/.idea/
 *.iml
 *.ipr
 *.iws

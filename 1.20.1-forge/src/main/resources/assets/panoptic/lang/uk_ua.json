@@ -8,7 +8,6 @@
   "key.panoptic.invert_sel": "Інвертувати виділення",
   "key.panoptic.clear_sel": "Зняти виділення",
   "key.panoptic.screengrab": "Розумний знімок",
-
   "panoptic.seed.title": "Сід-інспектор",
   "panoptic.seed.help_title": "Сід-інспектор",
   "panoptic.seed.help_sum": "§7Карта шумів і структур вашого світу: показує біоми та структури.",
@@ -75,7 +74,7 @@
   "panoptic.seed.height_y": "Y",
   "panoptic.seed.mode_biome": "Біоми",
   "panoptic.seed.mode_height": "Висота",
-
+  "panoptic.seed.loading": "Завантаження карти…",
   "panoptic.struct.minecraft.ancient_city": "Стародавнє місто",
   "panoptic.struct.minecraft.bastion_remnant": "Рештки бастіону",
   "panoptic.struct.minecraft.buried_treasure": "Захований скарб",
@@ -109,14 +108,12 @@
   "panoptic.struct.minecraft.village_savanna": "Село (савана)",
   "panoptic.struct.minecraft.village_snowy": "Село (засніжене)",
   "panoptic.struct.minecraft.village_taiga": "Село (тайга)",
-
   "panoptic.type.block": "Блок",
   "panoptic.type.item": "Предмет",
   "panoptic.type.entity": "Сутність",
   "panoptic.type.structure": "Структура",
   "panoptic.type.biome": "Біом",
   "panoptic.type.fluid": "Рідина",
-
   "panoptic.gui.title": "Інспектор",
   "panoptic.gui.mhelp_title": "Інспектор",
   "panoptic.gui.mhelp_sum": "§7Зазирає всередину будь-якого блока/предмета/сутності тощо",
@@ -205,15 +202,12 @@
   "panoptic.gui.prev.no_display": "(прихована)",
   "panoptic.gui.prev.loading": "Завантаження… %s/%s",
   "panoptic.gui.prev.loading_dots": "Завантаження…",
-
   "panoptic.msg.captured": "Занесено: %s",
   "panoptic.msg.already": "Уже занесено: %s",
-
   "panoptic.value.none": "(Немає)",
   "panoptic.value.no_properties": "(Немає властивостей)",
   "panoptic.value.yes": "Так",
   "panoptic.value.no": "Ні",
-
   "panoptic.field.id": "ID",
   "panoptic.field.translation_key": "Ключ перекладу",
   "panoptic.field.mod": "Мод",
@@ -277,7 +271,6 @@
   "panoptic.field.max_health": "Здоров'я",
   "panoptic.field.move_speed": "Швидкість руху",
   "panoptic.field.follow_range": "Радіус переслідування",
-
   "panoptic.vill.title": "Торг-Інспектор",
   "panoptic.vill.back": "Назад",
   "panoptic.vill.copy": "Копіювати",
@@ -316,7 +309,6 @@
   "panoptic.vill.copy_all_tip": "Скопіювати всіх селян збірки текстом",
   "panoptic.vill.pick_item": "Виберіть предмет ліворуч",
   "panoptic.vill.goto": "Перейти до селянина",
-
   "panoptic.bind.main": "Головне меню",
   "panoptic.bind.inspector": "Інспектор",
   "panoptic.bind.villagers": "Торг-Інспектор",
@@ -336,13 +328,11 @@
   "panoptic.bind.view_draw": "Малювання",
   "panoptic.bind.view_reset": "Скинути вигляд",
   "panoptic.bind.view_delete": "Видалити знімок",
-
   "panoptic.tool.inspector": "Інспектор",
   "panoptic.tool.map": "Сід-Інспектор",
   "panoptic.tool.villagers": "Торг-Інспектор",
   "panoptic.tool.settings": "Налаштування",
   "panoptic.tool.screens": "Скрін-Інспектор",
-
   "panoptic.main.desc.screens": "Каталог усіх ваших розумних знімків",
   "panoptic.main.title": "Panoptic",
   "panoptic.main.help_title": "Panoptic",
@@ -356,7 +346,6 @@
   "panoptic.main.desc.map": "Карта біомів і структур",
   "panoptic.main.desc.villagers": "Усі можливі в грі торги селян",
   "panoptic.main.desc.settings": "Керування та параметри мода",
-
   "panoptic.set.draw": "Малювання на знімку",
   "panoptic.set.theme": "Тема інтерфейсів",
   "panoptic.set.theme_r": "Червоний (R)",
@@ -389,7 +378,8 @@
   "panoptic.set.off": "Вимк",
   "panoptic.set.all": "Усі",
   "panoptic.set.zero_all": "Напишіть 0, якщо хочете бачити повні логи",
-
+  "panoptic.set.height_map": "Карта висот",
+  "panoptic.set.height_map_note": "Показує рельєф на карті сіду. Навантажує процесор - вимкніть, якщо карта гальмує.",
   "panoptic.grab.select": "Виділення області",
   "panoptic.grab.world_title": "Світ",
   "panoptic.grab.take": "Зняти",
@@ -402,7 +392,6 @@
   "panoptic.grab.tool_done": "Готово",
   "panoptic.grab.tool_cancel": "Закрити",
   "panoptic.grab.need_screen": "Відкрийте якийсь інтерфейс",
-
   "panoptic.screens.blocks": "Блоків",
   "panoptic.screens.palette": "Палітра",
   "panoptic.screens.entities": "Сутностей",
@@ -472,7 +461,6 @@
   "panoptic.screens.given_n": "Видано предметів: %s",
   "panoptic.screens.no_rights": "У вас немає прав",
   "panoptic.screens.inv_full": "Інвентар повний",
-
   "panoptic.pause.open": "Головний інтерфейс Panoptic",
   "panoptic.perm.denied": "У вас немає права на використання цієї функції",
   "panoptic.perm.locked": "§cНедоступно: у вас немає права на цей інтерфейс.",
@@ -511,7 +499,6 @@
   "panoptic.adm.help_b4": "Якщо на сервері стоїть LuckPerms, право `panoptic.admin` можна видати через нього, тоді гравець отримає доступ до цього інтерфейсу.",
   "panoptic.adm.help_b5": "Група default діє на всіх гравців за замовчуванням, доки їм не призначено свою групу.",
   "panoptic.adm.help_b6": "У права гравця три положення: «Прочерк» — успадковує право від групи; «Галочка» — Дозволено; «Хрестик» — Заборонено.",
-
   "panoptic.dash.seed": "Сід",
   "panoptic.dash.world": "Світ",
   "panoptic.dash.perf": "Продуктивність",

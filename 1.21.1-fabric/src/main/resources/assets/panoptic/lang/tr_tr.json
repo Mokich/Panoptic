@@ -8,7 +8,6 @@
   "key.panoptic.invert_sel": "Seçimi tersine çevir",
   "key.panoptic.clear_sel": "Seçimi temizle",
   "key.panoptic.screengrab": "Akıllı ekran görüntüsü",
-
   "panoptic.seed.title": "Tohum İnceleyici",
   "panoptic.seed.help_title": "Tohum İnceleyici",
   "panoptic.seed.help_sum": "§7Dünyanızın gürültü ve yapı haritası; biyomları ve yapıları gösterir.",
@@ -71,7 +70,11 @@
   "panoptic.seed.scale.many": "%s blok",
   "panoptic.seed.scale.thousand": "%s bin blok",
   "panoptic.seed.filter_n": "Filtre:",
-
+  "panoptic.seed.height_surface": "Yüzey",
+  "panoptic.seed.height_y": "Y",
+  "panoptic.seed.mode_biome": "Biyomlar",
+  "panoptic.seed.mode_height": "Yükseklik",
+  "panoptic.seed.loading": "Harita yükleniyor…",
   "panoptic.struct.minecraft.ancient_city": "Kadim Şehir",
   "panoptic.struct.minecraft.bastion_remnant": "Bastiyon Kalıntısı",
   "panoptic.struct.minecraft.buried_treasure": "Gömülü Hazine",
@@ -106,14 +109,12 @@
   "panoptic.struct.minecraft.village_savanna": "Savan Köyü",
   "panoptic.struct.minecraft.village_snowy": "Karlı Köy",
   "panoptic.struct.minecraft.village_taiga": "Tayga Köyü",
-
   "panoptic.type.block": "Blok",
   "panoptic.type.item": "Eşya",
   "panoptic.type.entity": "Varlık",
   "panoptic.type.structure": "Yapı",
   "panoptic.type.biome": "Biyom",
   "panoptic.type.fluid": "Sıvı",
-
   "panoptic.gui.title": "İnceleyici",
   "panoptic.gui.mhelp_title": "İnceleyici",
   "panoptic.gui.mhelp_sum": "§7Herhangi bir blok/eşya/varlığın içine bak",
@@ -202,15 +203,12 @@
   "panoptic.gui.prev.no_display": "(gizli)",
   "panoptic.gui.prev.loading": "Yükleniyor… %s/%s",
   "panoptic.gui.prev.loading_dots": "Yükleniyor…",
-
   "panoptic.msg.captured": "Yakalandı: %s",
   "panoptic.msg.already": "Zaten yakalandı: %s",
-
   "panoptic.value.none": "(Yok)",
   "panoptic.value.no_properties": "(Özellik yok)",
   "panoptic.value.yes": "Evet",
   "panoptic.value.no": "Hayır",
-
   "panoptic.field.id": "ID",
   "panoptic.field.translation_key": "Çeviri anahtarı",
   "panoptic.field.mod": "Mod",
@@ -274,7 +272,6 @@
   "panoptic.field.max_health": "Maks. can",
   "panoptic.field.move_speed": "Hareket hızı",
   "panoptic.field.follow_range": "Takip menzili",
-
   "panoptic.vill.title": "Ticaret İnceleyici",
   "panoptic.vill.back": "Geri",
   "panoptic.vill.copy": "Kopyala",
@@ -313,7 +310,6 @@
   "panoptic.vill.copy_all_tip": "Paketteki tüm köylüleri metin olarak kopyala",
   "panoptic.vill.pick_item": "Solda bir eşya seçin",
   "panoptic.vill.goto": "Köylüye git",
-
   "panoptic.bind.main": "Ana menü",
   "panoptic.bind.inspector": "İnceleyici'yi aç",
   "panoptic.bind.villagers": "Ticaret İnceleyici'yi aç",
@@ -333,13 +329,11 @@
   "panoptic.bind.view_draw": "Çizim",
   "panoptic.bind.view_reset": "Görünümü sıfırla",
   "panoptic.bind.view_delete": "Ekran görüntüsünü sil",
-
   "panoptic.tool.inspector": "İnceleyici",
   "panoptic.tool.map": "Tohum İnceleyici",
   "panoptic.tool.villagers": "Ticaret İnceleyici",
   "panoptic.tool.settings": "Ayarlar",
   "panoptic.tool.screens": "Ekran İnceleyici",
-
   "panoptic.main.desc.screens": "Tüm akıllı ekran görüntülerinizin kataloğu",
   "panoptic.main.title": "Panoptic",
   "panoptic.main.help_title": "Panoptic",
@@ -353,7 +347,6 @@
   "panoptic.main.desc.map": "Biyom ve yapı haritası",
   "panoptic.main.desc.villagers": "Oyundaki tüm olası köylü ticaretleri",
   "panoptic.main.desc.settings": "Kontroller ve mod seçenekleri",
-
   "panoptic.set.draw": "Ekran görüntüsüne çizim",
   "panoptic.set.theme": "Arayüz teması",
   "panoptic.set.theme_r": "Kırmızı (R)",
@@ -386,7 +379,8 @@
   "panoptic.set.off": "Kapalı",
   "panoptic.set.all": "Tümü",
   "panoptic.set.zero_all": "Tüm günlükleri görmek istiyorsanız 0 girin",
-
+  "panoptic.set.height_map": "Yükseklik haritası",
+  "panoptic.set.height_map_note": "Tohum haritasında arazi yüksekliğini gösterir. İşlemciyi zorlar - harita takılırsa kapatın.",
   "panoptic.grab.select": "Alan seçimi",
   "panoptic.grab.world_title": "Dünya",
   "panoptic.grab.take": "Yakala",
@@ -399,7 +393,6 @@
   "panoptic.grab.tool_done": "Bitti",
   "panoptic.grab.tool_cancel": "Kapat",
   "panoptic.grab.need_screen": "Önce bir arayüz açın",
-
   "panoptic.screens.blocks": "Bloklar",
   "panoptic.screens.palette": "Palet",
   "panoptic.screens.entities": "Varlıklar",
@@ -469,7 +462,6 @@
   "panoptic.screens.given_n": "Verilen eşyalar: %s",
   "panoptic.screens.no_rights": "İznin yok",
   "panoptic.screens.inv_full": "Envanter dolu",
-
   "panoptic.pause.open": "Panoptic ana arayüzü",
   "panoptic.perm.denied": "Bu özelliği kullanma iznin yok",
   "panoptic.perm.locked": "§cKilitli: bu arayüz için iznin yok.",
@@ -495,6 +487,7 @@
   "panoptic.adm.node.inspector": "İnceleyici",
   "panoptic.adm.node.seed.view": "Dünya tohumu",
   "panoptic.adm.node.seed.structures": "Haritadaki yapılar",
+  "panoptic.adm.node.seed.teleport": "Işınlanma",
   "panoptic.adm.node.trade": "Ticaret İnceleyici",
   "panoptic.adm.node.trade.spawn": "Köylü çağırma",
   "panoptic.adm.node.screens": "Ekran İnceleyici",
@@ -507,7 +500,6 @@
   "panoptic.adm.help_b4": "Sunucunuz LuckPerms kullanıyorsa, `panoptic.admin` iznini oradan verebilir ve oyuncuya bu arayüze erişim sağlayabilirsiniz.",
   "panoptic.adm.help_b5": "Varsayılan grup, bir oyuncu başka bir gruba atanana kadar her oyuncuya uygulanır.",
   "panoptic.adm.help_b6": "Her oyuncu izninin üç durumu vardır: «Tire» — izni gruptan devralır; «Onay» — izin verildi; «Çarpı» — reddedildi.",
-
   "panoptic.dash.seed": "Tohum",
   "panoptic.dash.world": "Dünya",
   "panoptic.dash.perf": "Performans",

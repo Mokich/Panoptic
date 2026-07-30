@@ -479,6 +479,7 @@
   "panoptic.adm.node.inspector": "Inspector",
   "panoptic.adm.node.seed.view": "World seed",
   "panoptic.adm.node.seed.structures": "Structures on map",
+  "panoptic.adm.node.seed.teleport": "Teleport",
   "panoptic.adm.node.trade": "Trade Inspector",
   "panoptic.adm.node.trade.spawn": "Villager spawn",
   "panoptic.adm.node.screens": "Screen Inspector",

@@ -8,7 +8,6 @@
   "key.panoptic.invert_sel": "Odwróć zaznaczenie",
   "key.panoptic.clear_sel": "Wyczyść zaznaczenie",
   "key.panoptic.screengrab": "Inteligentny zrzut",
-
   "panoptic.seed.title": "Inspektor ziarna",
   "panoptic.seed.help_title": "Inspektor ziarna",
   "panoptic.seed.help_sum": "§7Mapa szumu i struktur twojego świata, pokazująca biomy i struktury.",
@@ -75,7 +74,7 @@
   "panoptic.seed.height_y": "Y",
   "panoptic.seed.mode_biome": "Biomy",
   "panoptic.seed.mode_height": "Wysokość",
-
+  "panoptic.seed.loading": "Wczytywanie mapy…",
   "panoptic.struct.minecraft.ancient_city": "Starożytne miasto",
   "panoptic.struct.minecraft.bastion_remnant": "Pozostałość bastionu",
   "panoptic.struct.minecraft.buried_treasure": "Zakopany skarb",
@@ -109,14 +108,12 @@
   "panoptic.struct.minecraft.village_savanna": "Wioska (sawanna)",
   "panoptic.struct.minecraft.village_snowy": "Wioska (śnieżna)",
   "panoptic.struct.minecraft.village_taiga": "Wioska (tajga)",
-
   "panoptic.type.block": "Blok",
   "panoptic.type.item": "Przedmiot",
   "panoptic.type.entity": "Encja",
   "panoptic.type.structure": "Struktura",
   "panoptic.type.biome": "Biom",
   "panoptic.type.fluid": "Płyn",
-
   "panoptic.gui.title": "Inspektor",
   "panoptic.gui.mhelp_title": "Inspektor",
   "panoptic.gui.mhelp_sum": "§7Zajrzyj do wnętrza dowolnego bloku/przedmiotu/encji",
@@ -205,15 +202,12 @@
   "panoptic.gui.prev.no_display": "(ukryte)",
   "panoptic.gui.prev.loading": "Wczytywanie… %s/%s",
   "panoptic.gui.prev.loading_dots": "Wczytywanie…",
-
   "panoptic.msg.captured": "Przechwycono: %s",
   "panoptic.msg.already": "Już przechwycono: %s",
-
   "panoptic.value.none": "(Brak)",
   "panoptic.value.no_properties": "(Brak właściwości)",
   "panoptic.value.yes": "Tak",
   "panoptic.value.no": "Nie",
-
   "panoptic.field.id": "ID",
   "panoptic.field.translation_key": "Klucz tłumaczenia",
   "panoptic.field.mod": "Mod",
@@ -277,7 +271,6 @@
   "panoptic.field.max_health": "Zdrowie",
   "panoptic.field.move_speed": "Prędkość ruchu",
   "panoptic.field.follow_range": "Zasięg podążania",
-
   "panoptic.vill.title": "Inspektor handlu",
   "panoptic.vill.back": "Powrót",
   "panoptic.vill.copy": "Kopiuj",
@@ -316,7 +309,6 @@
   "panoptic.vill.copy_all_tip": "Skopiuj wszystkich osadników z paczki jako tekst",
   "panoptic.vill.pick_item": "Wybierz przedmiot po lewej",
   "panoptic.vill.goto": "Przejdź do osadnika",
-
   "panoptic.bind.main": "Menu główne",
   "panoptic.bind.inspector": "Otwórz Inspektor",
   "panoptic.bind.villagers": "Otwórz Inspektor handlu",
@@ -336,13 +328,11 @@
   "panoptic.bind.view_draw": "Rysowanie",
   "panoptic.bind.view_reset": "Resetuj widok",
   "panoptic.bind.view_delete": "Usuń zrzut",
-
   "panoptic.tool.inspector": "Inspektor",
   "panoptic.tool.map": "Inspektor ziarna",
   "panoptic.tool.villagers": "Inspektor handlu",
   "panoptic.tool.settings": "Ustawienia",
   "panoptic.tool.screens": "Inspektor ekranu",
-
   "panoptic.main.desc.screens": "Katalog wszystkich twoich inteligentnych zrzutów",
   "panoptic.main.title": "Panoptic",
   "panoptic.main.help_title": "Panoptic",
@@ -356,7 +346,6 @@
   "panoptic.main.desc.map": "Mapa biomów i struktur",
   "panoptic.main.desc.villagers": "Wszystkie możliwe w grze oferty osadników",
   "panoptic.main.desc.settings": "Sterowanie i opcje moda",
-
   "panoptic.set.draw": "Rysowanie na zrzucie",
   "panoptic.set.theme": "Motyw interfejsu",
   "panoptic.set.theme_r": "Czerwony (R)",
@@ -389,7 +378,8 @@
   "panoptic.set.off": "Wył",
   "panoptic.set.all": "Wszystkie",
   "panoptic.set.zero_all": "Wpisz 0, jeśli chcesz widzieć pełne logi",
-
+  "panoptic.set.height_map": "Mapa wysokości",
+  "panoptic.set.height_map_note": "Pokazuje rzeźbę terenu na mapie ziarna. Obciąża procesor - wyłącz, jeśli mapa działa wolno.",
   "panoptic.grab.select": "Zaznaczanie obszaru",
   "panoptic.grab.world_title": "Świat",
   "panoptic.grab.take": "Przechwyć",
@@ -402,7 +392,6 @@
   "panoptic.grab.tool_done": "Gotowe",
   "panoptic.grab.tool_cancel": "Zamknij",
   "panoptic.grab.need_screen": "Najpierw otwórz jakiś interfejs",
-
   "panoptic.screens.blocks": "Bloki",
   "panoptic.screens.palette": "Paleta",
   "panoptic.screens.entities": "Encje",
@@ -472,7 +461,6 @@
   "panoptic.screens.given_n": "Dano przedmiotów: %s",
   "panoptic.screens.no_rights": "Nie masz uprawnień",
   "panoptic.screens.inv_full": "Ekwipunek pełny",
-
   "panoptic.pause.open": "Główny interfejs Panoptic",
   "panoptic.perm.denied": "Nie masz uprawnień do korzystania z tej funkcji",
   "panoptic.perm.locked": "§cZablokowane: nie masz uprawnień do tego interfejsu.",
@@ -511,7 +499,6 @@
   "panoptic.adm.help_b4": "Jeśli twój serwer używa LuckPerms, możesz przyznać uprawnienie `panoptic.admin` przez nie, dając graczowi dostęp do tego interfejsu.",
   "panoptic.adm.help_b5": "Grupa domyślna dotyczy każdego gracza, dopóki nie zostanie przypisany do innej grupy.",
   "panoptic.adm.help_b6": "Każde uprawnienie gracza ma trzy stany: „Myślnik” — dziedziczy uprawnienie z grupy; „Ptaszek” — dozwolone; „Krzyżyk” — zabronione.",
-
   "panoptic.dash.seed": "Ziarno",
   "panoptic.dash.world": "Świat",
   "panoptic.dash.perf": "Wydajność",

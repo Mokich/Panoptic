@@ -8,7 +8,6 @@
   "key.panoptic.invert_sel": "Selectie omkeren",
   "key.panoptic.clear_sel": "Selectie wissen",
   "key.panoptic.screengrab": "Slimme schermafbeelding",
-
   "panoptic.seed.title": "Seed-inspecteur",
   "panoptic.seed.help_title": "Seed-inspecteur",
   "panoptic.seed.help_sum": "§7Een ruis- en structuurkaart van je wereld, die biomen en structuren toont.",
@@ -71,7 +70,11 @@
   "panoptic.seed.scale.many": "%s blokken",
   "panoptic.seed.scale.thousand": "%sk blokken",
   "panoptic.seed.filter_n": "Filter:",
-
+  "panoptic.seed.height_surface": "Oppervlak",
+  "panoptic.seed.height_y": "Y",
+  "panoptic.seed.mode_biome": "Biomen",
+  "panoptic.seed.mode_height": "Hoogte",
+  "panoptic.seed.loading": "Kaart laden…",
   "panoptic.struct.minecraft.ancient_city": "Oude stad",
   "panoptic.struct.minecraft.bastion_remnant": "Bastionrestant",
   "panoptic.struct.minecraft.buried_treasure": "Begraven schat",
@@ -105,14 +108,12 @@
   "panoptic.struct.minecraft.village_savanna": "Savannedorp",
   "panoptic.struct.minecraft.village_snowy": "Besneeuwd dorp",
   "panoptic.struct.minecraft.village_taiga": "Taigadorp",
-
   "panoptic.type.block": "Blok",
   "panoptic.type.item": "Voorwerp",
   "panoptic.type.entity": "Entiteit",
   "panoptic.type.structure": "Structuur",
   "panoptic.type.biome": "Bioom",
   "panoptic.type.fluid": "Vloeistof",
-
   "panoptic.gui.title": "Inspecteur",
   "panoptic.gui.mhelp_title": "Inspecteur",
   "panoptic.gui.mhelp_sum": "§7Kijk in elk blok/voorwerp/elke entiteit",
@@ -201,15 +202,12 @@
   "panoptic.gui.prev.no_display": "(verborgen)",
   "panoptic.gui.prev.loading": "Laden… %s/%s",
   "panoptic.gui.prev.loading_dots": "Laden…",
-
   "panoptic.msg.captured": "Vastgelegd: %s",
   "panoptic.msg.already": "Al vastgelegd: %s",
-
   "panoptic.value.none": "(Geen)",
   "panoptic.value.no_properties": "(Geen eigenschappen)",
   "panoptic.value.yes": "Ja",
   "panoptic.value.no": "Nee",
-
   "panoptic.field.id": "ID",
   "panoptic.field.translation_key": "Vertaalsleutel",
   "panoptic.field.mod": "Mod",
@@ -273,7 +271,6 @@
   "panoptic.field.max_health": "Max. gezondheid",
   "panoptic.field.move_speed": "Bewegingssnelheid",
   "panoptic.field.follow_range": "Volgbereik",
-
   "panoptic.vill.title": "Handelsinspecteur",
   "panoptic.vill.back": "Terug",
   "panoptic.vill.copy": "Kopiëren",
@@ -312,7 +309,6 @@
   "panoptic.vill.copy_all_tip": "Alle dorpelingen van het pakket als tekst kopiëren",
   "panoptic.vill.pick_item": "Kies links een voorwerp",
   "panoptic.vill.goto": "Naar dorpeling",
-
   "panoptic.bind.main": "Hoofdmenu",
   "panoptic.bind.inspector": "Inspecteur openen",
   "panoptic.bind.villagers": "Handelsinspecteur openen",
@@ -332,13 +328,11 @@
   "panoptic.bind.view_draw": "Tekenen",
   "panoptic.bind.view_reset": "Weergave resetten",
   "panoptic.bind.view_delete": "Schermafbeelding verwijderen",
-
   "panoptic.tool.inspector": "Inspecteur",
   "panoptic.tool.map": "Seed-inspecteur",
   "panoptic.tool.villagers": "Handelsinspecteur",
   "panoptic.tool.settings": "Instellingen",
   "panoptic.tool.screens": "Scherminspecteur",
-
   "panoptic.main.desc.screens": "Een catalogus van al je slimme schermafbeeldingen",
   "panoptic.main.title": "Panoptic",
   "panoptic.main.help_title": "Panoptic",
@@ -352,7 +346,6 @@
   "panoptic.main.desc.map": "Biome- en structuurkaart",
   "panoptic.main.desc.villagers": "Alle mogelijke dorpelingenhandel in het spel",
   "panoptic.main.desc.settings": "Besturing en mod-opties",
-
   "panoptic.set.draw": "Tekenen op schermafbeelding",
   "panoptic.set.theme": "Interfacethema",
   "panoptic.set.theme_r": "Rood (R)",
@@ -385,7 +378,8 @@
   "panoptic.set.off": "Uit",
   "panoptic.set.all": "Alle",
   "panoptic.set.zero_all": "Voer 0 in als je de volledige logs wilt zien",
-
+  "panoptic.set.height_map": "Hoogtekaart",
+  "panoptic.set.height_map_note": "Toont het reliëf van het terrein op de seed-kaart. Belast de CPU - schakel uit als de kaart hapert.",
   "panoptic.grab.select": "Gebiedsselectie",
   "panoptic.grab.world_title": "Wereld",
   "panoptic.grab.take": "Vastleggen",
@@ -398,7 +392,6 @@
   "panoptic.grab.tool_done": "Klaar",
   "panoptic.grab.tool_cancel": "Sluiten",
   "panoptic.grab.need_screen": "Open eerst een interface",
-
   "panoptic.screens.blocks": "Blokken",
   "panoptic.screens.palette": "Palet",
   "panoptic.screens.entities": "Entiteiten",
@@ -468,7 +461,6 @@
   "panoptic.screens.given_n": "Gegeven voorwerpen: %s",
   "panoptic.screens.no_rights": "Je hebt geen toestemming",
   "panoptic.screens.inv_full": "Inventaris vol",
-
   "panoptic.pause.open": "De hoofdinterface van Panoptic",
   "panoptic.perm.denied": "Je hebt geen toestemming om deze functie te gebruiken",
   "panoptic.perm.locked": "§cVergrendeld: je hebt geen toestemming voor deze interface.",
@@ -494,6 +486,7 @@
   "panoptic.adm.node.inspector": "Inspecteur",
   "panoptic.adm.node.seed.view": "Wereldseed",
   "panoptic.adm.node.seed.structures": "Structuren op kaart",
+  "panoptic.adm.node.seed.teleport": "Teleporteren",
   "panoptic.adm.node.trade": "Handelsinspecteur",
   "panoptic.adm.node.trade.spawn": "Dorpeling spawnen",
   "panoptic.adm.node.screens": "Scherminspecteur",
@@ -506,7 +499,6 @@
   "panoptic.adm.help_b4": "Als je server LuckPerms gebruikt, kun je het recht `panoptic.admin` daarmee toekennen, zodat de speler toegang tot deze interface krijgt.",
   "panoptic.adm.help_b5": "De standaardgroep geldt voor elke speler totdat die aan een andere groep wordt toegewezen.",
   "panoptic.adm.help_b6": "Elk spelerrecht heeft drie standen: «Streepje» — erft het recht van de groep; «Vinkje» — toegestaan; «Kruisje» — geweigerd.",
-
   "panoptic.dash.seed": "Seed",
   "panoptic.dash.world": "Wereld",
   "panoptic.dash.perf": "Prestaties",

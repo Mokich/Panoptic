@@ -8,7 +8,6 @@
   "key.panoptic.invert_sel": "選択を反転",
   "key.panoptic.clear_sel": "選択を解除",
   "key.panoptic.screengrab": "スマートスクリーンショット",
-
   "panoptic.seed.title": "シードインスペクター",
   "panoptic.seed.help_title": "シードインスペクター",
   "panoptic.seed.help_sum": "§7ワールドのノイズと構造物のマップ。バイオームや構造物を表示します。",
@@ -71,7 +70,11 @@
   "panoptic.seed.scale.many": "%sブロック",
   "panoptic.seed.scale.thousand": "%s千ブロック",
   "panoptic.seed.filter_n": "フィルター:",
-
+  "panoptic.seed.height_surface": "地表",
+  "panoptic.seed.height_y": "Y",
+  "panoptic.seed.mode_biome": "バイオーム",
+  "panoptic.seed.mode_height": "高さ",
+  "panoptic.seed.loading": "マップを読み込み中…",
   "panoptic.struct.minecraft.ancient_city": "古代都市",
   "panoptic.struct.minecraft.bastion_remnant": "砦の遺跡",
   "panoptic.struct.minecraft.buried_treasure": "埋もれた宝",
@@ -106,14 +109,12 @@
   "panoptic.struct.minecraft.village_savanna": "サバンナの村",
   "panoptic.struct.minecraft.village_snowy": "雪の村",
   "panoptic.struct.minecraft.village_taiga": "タイガの村",
-
   "panoptic.type.block": "ブロック",
   "panoptic.type.item": "アイテム",
   "panoptic.type.entity": "エンティティ",
   "panoptic.type.structure": "構造物",
   "panoptic.type.biome": "バイオーム",
   "panoptic.type.fluid": "液体",
-
   "panoptic.gui.title": "インスペクター",
   "panoptic.gui.mhelp_title": "インスペクター",
   "panoptic.gui.mhelp_sum": "§7あらゆるブロック・アイテム・エンティティの中身を覗く",
@@ -202,15 +203,12 @@
   "panoptic.gui.prev.no_display": "（非表示）",
   "panoptic.gui.prev.loading": "読み込み中… %s/%s",
   "panoptic.gui.prev.loading_dots": "読み込み中…",
-
   "panoptic.msg.captured": "記録: %s",
   "panoptic.msg.already": "記録済み: %s",
-
   "panoptic.value.none": "（なし）",
   "panoptic.value.no_properties": "（プロパティなし）",
   "panoptic.value.yes": "はい",
   "panoptic.value.no": "いいえ",
-
   "panoptic.field.id": "ID",
   "panoptic.field.translation_key": "翻訳キー",
   "panoptic.field.mod": "Mod",
@@ -274,7 +272,6 @@
   "panoptic.field.max_health": "最大体力",
   "panoptic.field.move_speed": "移動速度",
   "panoptic.field.follow_range": "追跡範囲",
-
   "panoptic.vill.title": "取引インスペクター",
   "panoptic.vill.back": "戻る",
   "panoptic.vill.copy": "コピー",
@@ -313,7 +310,6 @@
   "panoptic.vill.copy_all_tip": "パック内のすべての村人をテキストとしてコピー",
   "panoptic.vill.pick_item": "左でアイテムを選んでください",
   "panoptic.vill.goto": "村人へ移動",
-
   "panoptic.bind.main": "メインメニュー",
   "panoptic.bind.inspector": "インスペクターを開く",
   "panoptic.bind.villagers": "取引インスペクターを開く",
@@ -333,13 +329,11 @@
   "panoptic.bind.view_draw": "描画",
   "panoptic.bind.view_reset": "表示をリセット",
   "panoptic.bind.view_delete": "スクリーンショットを削除",
-
   "panoptic.tool.inspector": "インスペクター",
   "panoptic.tool.map": "シードインスペクター",
   "panoptic.tool.villagers": "取引インスペクター",
   "panoptic.tool.settings": "設定",
   "panoptic.tool.screens": "画面インスペクター",
-
   "panoptic.main.desc.screens": "スマートスクリーンショットのカタログ",
   "panoptic.main.title": "Panoptic",
   "panoptic.main.help_title": "Panoptic",
@@ -353,7 +347,6 @@
   "panoptic.main.desc.map": "バイオームと構造物のマップ",
   "panoptic.main.desc.villagers": "ゲーム内のすべての村人取引",
   "panoptic.main.desc.settings": "キー割り当てとModの設定",
-
   "panoptic.set.draw": "スクリーンショットへの描画",
   "panoptic.set.theme": "UIテーマ",
   "panoptic.set.theme_r": "赤 (R)",
@@ -386,7 +379,8 @@
   "panoptic.set.off": "オフ",
   "panoptic.set.all": "すべて",
   "panoptic.set.zero_all": "完全なログを見たい場合は0を入力してください",
-
+  "panoptic.set.height_map": "高さマップ",
+  "panoptic.set.height_map_note": "シードマップに地形の起伏を表示します。CPUに負荷がかかります - マップが重い場合はオフにしてください。",
   "panoptic.grab.select": "範囲選択",
   "panoptic.grab.world_title": "ワールド",
   "panoptic.grab.take": "撮影",
@@ -399,7 +393,6 @@
   "panoptic.grab.tool_done": "完了",
   "panoptic.grab.tool_cancel": "閉じる",
   "panoptic.grab.need_screen": "先に何か画面を開いてください",
-
   "panoptic.screens.blocks": "ブロック",
   "panoptic.screens.palette": "パレット",
   "panoptic.screens.entities": "エンティティ",
@@ -469,7 +462,6 @@
   "panoptic.screens.given_n": "付与したアイテム: %s",
   "panoptic.screens.no_rights": "権限がありません",
   "panoptic.screens.inv_full": "インベントリがいっぱいです",
-
   "panoptic.pause.open": "Panopticのメイン画面",
   "panoptic.perm.denied": "この機能を使う権限がありません",
   "panoptic.perm.locked": "§c利用不可: この画面を使う権限がありません。",
@@ -495,6 +487,7 @@
   "panoptic.adm.node.inspector": "インスペクター",
   "panoptic.adm.node.seed.view": "ワールドシード",
   "panoptic.adm.node.seed.structures": "マップ上の構造物",
+  "panoptic.adm.node.seed.teleport": "テレポート",
   "panoptic.adm.node.trade": "取引インスペクター",
   "panoptic.adm.node.trade.spawn": "村人スポーン",
   "panoptic.adm.node.screens": "画面インスペクター",
@@ -507,7 +500,6 @@
   "panoptic.adm.help_b4": "サーバーでLuckPermsを使用している場合、`panoptic.admin`権限をそちらで付与すると、そのプレイヤーはこの画面にアクセスできます。",
   "panoptic.adm.help_b5": "defaultグループは、別のグループが割り当てられるまですべてのプレイヤーに適用されます。",
   "panoptic.adm.help_b6": "プレイヤーの各権限には3つの状態があります：「―」＝グループから継承、「レ」＝許可、「×」＝拒否。",
-
   "panoptic.dash.seed": "シード",
   "panoptic.dash.world": "ワールド",
   "panoptic.dash.perf": "パフォーマンス",
