@@ -14,11 +14,15 @@ import org.apache.logging.log4j.core.config.Property;
 public final class LogFeed {
     public record Line(long time, Level level, String logger, String text) {}
 
+    private static final int DEFAULT_MAX_LINES = 2000;
+
     private static final Deque<Line> LINES = new ArrayDeque<>();
     private static final Object LOCK = new Object();
+    private static final ThreadLocal<Boolean> INSIDE = new ThreadLocal<>();
     private static volatile boolean attached;
-    private static int warns;
-    private static int errors;
+    private static volatile int maxLines = DEFAULT_MAX_LINES;
+    private static volatile int warns;
+    private static volatile int errors;
     private static int version;
     private static List<Line> cached = List.of();
     private static int cachedVersion = -1;
@@ -46,6 +50,19 @@ public final class LogFeed {
     }
 
     private static void accept(LogEvent event) {
+        if (Boolean.TRUE.equals(INSIDE.get())) {
+            return;
+        }
+        INSIDE.set(Boolean.TRUE);
+        try {
+            record(event);
+        } catch (Throwable ignored) {
+        } finally {
+            INSIDE.remove();
+        }
+    }
+
+    private static void record(LogEvent event) {
         Level level = event.getLevel();
         String logger = event.getLoggerName();
         if (logger == null) {
@@ -68,14 +85,15 @@ public final class LogFeed {
         if (msg.length() > 400) {
             msg = msg.substring(0, 400);
         }
+        Line line = new Line(System.currentTimeMillis(), level, logger, msg);
+        int cap = maxLines;
         synchronized (LOCK) {
             if (level == Level.ERROR || level == Level.FATAL) {
                 errors++;
             } else if (level == Level.WARN) {
                 warns++;
             }
-            LINES.addLast(new Line(System.currentTimeMillis(), level, logger, msg));
-            int cap = ModSettings.getInt(ModSettings.LOG_MAX_LINES);
+            LINES.addLast(line);
             if (cap > 0) {
                 while (LINES.size() > cap) {
                     LINES.removeFirst();
@@ -86,6 +104,7 @@ public final class LogFeed {
     }
 
     public static List<Line> snapshot() {
+        refreshMaxLines();
         synchronized (LOCK) {
             long now = System.currentTimeMillis();
             if (cachedVersion != version && now - lastRebuild >= 50L) {
@@ -94,6 +113,16 @@ public final class LogFeed {
                 lastRebuild = now;
             }
             return cached;
+        }
+    }
+
+    private static void refreshMaxLines() {
+        try {
+            int value = ModSettings.getInt(ModSettings.LOG_MAX_LINES);
+            if (value > 0) {
+                maxLines = value;
+            }
+        } catch (Throwable ignored) {
         }
     }
 
