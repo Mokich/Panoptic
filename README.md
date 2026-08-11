@@ -15,7 +15,7 @@ For dedicated servers, pair it with its server-side companion [Panopticon](https
 |:---:|:---:|:---:|:---:|
 | 1.20.1 | ✅ | - | ✅ |
 | 1.21.1 | ✅ | ✅ | ✅ |
-| 26.1.2 | ✅ | ✅ | ✅ |
+| 26.1.2 | ✅ | ✅ | - |
 
 ## Repository layout
 
