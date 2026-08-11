@@ -48,7 +48,7 @@ public final class Perms {
         if (f == Feature.TRADE_SPAWN || f == Feature.SCREENS_GIVE || f == Feature.SEED_TELEPORT || f == Feature.ADMIN) {
             return false;
         }
-        return PanopticConfig.openAccess() && singleWorld();
+        return (PanopticConfig.openAccess() || PanopticConfig.featureOpen(f)) && singleWorld();
     }
 
     private static boolean singleWorld() {

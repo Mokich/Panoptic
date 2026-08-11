@@ -2031,20 +2031,21 @@ public class SeedMapScreen extends Screen implements TextTyping {
     }
 
     private void clickAt(int wx, int wz) {
-        if (map != null && map.currentWorld && this.minecraft.player != null) {
-            IntegratedServer server = this.minecraft.getSingleplayerServer();
-            if (server != null) {
-                teleportToSurface(server, wx, wz);
-                sound(1.5F);
-            } else if (Perms.allowed(Perms.Feature.SEED_TELEPORT)) {
-                TeleportSurfacePacket.send(new TeleportSurfacePacket(map.dim.location(), wx, wz));
-                sound(1.5F);
-            } else {
-                Perms.deny();
-            }
-        } else {
+        if (map == null || !map.currentWorld || this.minecraft.player == null) {
             copy(wx + " " + wz);
+            return;
         }
+        if (!Perms.allowed(Perms.Feature.SEED_TELEPORT)) {
+            Perms.deny();
+            return;
+        }
+        IntegratedServer server = this.minecraft.getSingleplayerServer();
+        if (server != null) {
+            teleportToSurface(server, wx, wz);
+        } else {
+            TeleportSurfacePacket.send(new TeleportSurfacePacket(map.dim.location(), wx, wz));
+        }
+        sound(1.5F);
     }
 
     private void teleportToSurface(IntegratedServer server, int wx, int wz) {

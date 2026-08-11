@@ -67,6 +67,9 @@ public final class ScreenCaptureHandler {
         armed = false;
         Screen screen = pendingScreen;
         pendingScreen = null;
+        GuiCaptureRecorder.mergeSpots(HoverProbe.spots());
+        GuiCaptureRecorder.mergeSpots(HoverProbe.spots());
+        GuiCaptureRecorder.mergeSpots(HoverProbe.spots());
         List<GrabOp> ops = GuiCaptureRecorder.disarmAndDrain();
         Minecraft mc = Minecraft.getInstance();
         NativeImage shot = null;

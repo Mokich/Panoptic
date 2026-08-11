@@ -6,7 +6,10 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Set;
 
 public final class GuiCaptureRecorder {
     private static final List<GrabOp> OPS = new ArrayList<>();
@@ -21,6 +24,43 @@ public final class GuiCaptureRecorder {
 
     public static boolean isArmed() {
         return armed;
+    }
+
+    public static void mergeSpots(List<HoverProbe.Spot> spots) {
+        if (!armed) {
+            return;
+        }
+        List<float[]> taken = new ArrayList<>();
+        for (GrabOp op : OPS) {
+            if ("i".equals(op.t)) {
+                taken.add(new float[]{op.x1, op.y1, op.scale, op.scale});
+            }
+        }
+        List<HoverProbe.Spot> ordered = new ArrayList<>(spots);
+        ordered.sort((a, b) -> Long.compare(b.time(), a.time()));
+        Set<ItemStack> used = Collections.newSetFromMap(new IdentityHashMap<>());
+        for (HoverProbe.Spot spot : ordered) {
+            if (!cap()) {
+                return;
+            }
+            if (!used.add(spot.stack()) || overlaps(taken, spot)) {
+                continue;
+            }
+            taken.add(new float[]{spot.x(), spot.y(), spot.w(), spot.h()});
+            OPS.add(GrabOp.item(spot.stack(), spot.x(), spot.y(), Math.max(spot.w(), spot.h())));
+        }
+    }
+
+    private static boolean overlaps(List<float[]> taken, HoverProbe.Spot spot) {
+        float area = Math.max(spot.w() * spot.h(), 1.0F);
+        for (float[] r : taken) {
+            float w = Math.min(r[0] + r[2], spot.x() + spot.w()) - Math.max(r[0], spot.x());
+            float h = Math.min(r[1] + r[3], spot.y() + spot.h()) - Math.max(r[1], spot.y());
+            if (w > 0.0F && h > 0.0F && w * h > area * 0.4F) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static List<GrabOp> disarmAndDrain() {
@@ -78,12 +118,11 @@ public final class GuiCaptureRecorder {
         if (!cap() || stack == null || stack.isEmpty()) {
             return;
         }
-        float sx = Math.abs(m.m00());
-        float sy = Math.abs(m.m11());
-        if (sx < 1.0F || sy < 1.0F) {
+        float[] rect = ItemQuad.of(m);
+        if (rect == null) {
             return;
         }
-        OPS.add(GrabOp.item(stack, m.m30() - sx / 2.0F, m.m31() - sy / 2.0F, Math.max(sx, sy)));
+        OPS.add(GrabOp.item(stack, rect[0], rect[1], Math.max(rect[2], rect[3])));
     }
 
     public static void entity(Matrix4f m, int x, int y, int size, float angleX, float angleY, String type) {
