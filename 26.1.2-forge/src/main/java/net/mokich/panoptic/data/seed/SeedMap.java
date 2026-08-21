@@ -1,6 +1,7 @@
 package net.mokich.panoptic.data.seed;
 
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.level.chunk.PalettedContainerFactory;
 import net.mokich.panoptic.Guard;
 import net.minecraft.client.Minecraft;
@@ -1506,6 +1507,11 @@ public final class SeedMap {
             if (cur != null) {
                 return 0xFF000000 | cur;
             }
+        }
+        if (b.is(BiomeTags.WATER_ON_MAP_OUTLINES)) {
+            try {
+                return 0xFF000000 | b.value().getWaterColor();
+            } catch (Throwable ignored) {}
         }
         int grass;
         try {
