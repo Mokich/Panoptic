@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Specification-Title: panoptic
+Specification-Vendor: Mokich
+Specification-Version: 1
+Implementation-Title: Panoptic
+Implementation-Version: 1.0
+Implementation-Vendor: Mokich
+Implementation-Timestamp: 2024-10-22T20:04:14+0300

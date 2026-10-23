@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.mokich.panoptic.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [],
+  "client": [
+    "AbstractContainerScreenAccessor",
+    "GuiGraphicsCaptureMixin",
+    "InventoryScreenEntityMixin",
+    "ItemRendererCaptureMixin",
+    "KeyboardHandlerMixin",
+    "MouseHandlerMixin",
+    "ScreenKeyboardMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
