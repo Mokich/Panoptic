@@ -1,4 +1,4 @@
-def fabricBuilds = ['1.21.1-fabric', '1.20.1-fabric']
+def fabricBuilds = ['1.21.1-fabric', '1.20.1-fabric', '26.3-fabric']
 def standaloneBuilds = fabricBuilds + ['26.1.2-neoforge', '26.1.2-forge']
 def wipBuilds = []
 def loaderBuilds = ['1.20.1-forge', '1.21.1-forge', '1.21.1-neoforge'] + standaloneBuilds + wipBuilds

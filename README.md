@@ -16,10 +16,11 @@ For dedicated servers, pair it with its server-side companion [Panopticon](https
 | 1.20.1 | ✅ | - | ✅ |
 | 1.21.1 | ✅ | ✅ | ✅ |
 | 26.1.2 | ✅ | ✅ | - |
+| 26.3 | - | - | ✅ |
 
 ## Repository layout
 
-The repository is five self-contained Gradle projects, one per loader target, plus a composite root that builds them all:
+The repository is eight self-contained Gradle projects, one per loader target, plus a composite root that builds them all:
 
 ```
 Panoptic/
@@ -28,6 +29,9 @@ Panoptic/
 ├── 1.21.1-neoforge/   ModDevGradle, Java 21
 ├── 1.21.1-fabric/     Fabric Loom, Java 21
 ├── 1.20.1-fabric/     Fabric Loom, Java 17 target
+├── 26.1.2-forge/      ForgeGradle 7, Java 25
+├── 26.1.2-neoforge/   ModDevGradle, Java 25
+├── 26.3-fabric/       Fabric Loom, Java 25
 ├── settings.gradle    composite build (forge/neoforge projects)
 ├── build.gradle       buildAll / cleanAll / collectJars
 └── stampDates.gradle  reproducible jar timestamps
@@ -35,17 +39,17 @@ Panoptic/
 
 There is no shared source set: each target carries its own full copy of the code, adapted to that loader's APIs. Pure logic and UI classes are identical across targets; loader-facing classes (networking, events, resource access) differ per target.
 
-The Forge/NeoForge projects are part of a Gradle composite build. The two Fabric projects require a newer Gradle for Loom, so the root drives them through their own wrappers instead of including them in the composite.
+The Forge/NeoForge projects are part of a Gradle composite build. The Fabric projects require a newer Gradle for Loom, so the root drives them through their own wrappers instead of including them in the composite.
 
 ## Building
 
-Requires JDK 17 and JDK 21 installed (Gradle toolchains pick them up automatically). From the repository root:
+Requires JDK 17, JDK 21 and JDK 25 installed (Gradle toolchains pick them up automatically). From the repository root:
 
 ```
 ./gradlew buildAll
 ```
 
-This builds all five targets and collects the final jars into `build/libs/`. Individual targets: `./gradlew build_1_20_1_fabric`, `./gradlew build_1_21_1_fabric`, or run `gradlew build` inside any Forge/NeoForge subproject.
+This builds all eight targets and collects the final jars into `build/libs/`. Individual targets: `./gradlew build_1_20_1_fabric`, `./gradlew build_1_21_1_fabric`, `./gradlew build_26_3_fabric`, or run `gradlew build` inside any Forge/NeoForge subproject.
 
 Builds are reproducible: file order inside the jars is fixed and every zip entry carries the same constant timestamp.
 
