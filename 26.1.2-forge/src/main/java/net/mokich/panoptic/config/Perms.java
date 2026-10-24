@@ -4,6 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.Permissions;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -43,12 +45,30 @@ public final class Perms {
             return false;
         }
         if (Minecraft.getInstance().hasSingleplayerServer()) {
+            if (f == Feature.TRADE_SPAWN || f == Feature.SCREENS_GIVE
+                    || f == Feature.SEED_TELEPORT || f == Feature.ADMIN) {
+                return singleplayerGameMaster();
+            }
             return true;
         }
         if (f == Feature.TRADE_SPAWN || f == Feature.SCREENS_GIVE || f == Feature.SEED_TELEPORT || f == Feature.ADMIN) {
             return false;
         }
         return (PanopticConfig.openAccess() || PanopticConfig.featureOpen(f)) && singleWorld();
+    }
+
+    /**
+     * Singleplayer hosts always get the read-only tools, but actions that change
+     * the world (spawning villagers, giving items, teleporting, the permission
+     * editor) require the same permission level as vanilla commands.
+     */
+    private static boolean singleplayerGameMaster() {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null || mc.getSingleplayerServer() == null) {
+            return false;
+        }
+        ServerPlayer player = mc.getSingleplayerServer().getPlayerList().getPlayer(mc.player.getUUID());
+        return player != null && player.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER);
     }
 
     private static boolean singleWorld() {
